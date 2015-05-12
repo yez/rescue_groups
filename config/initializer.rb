@@ -6,4 +6,4 @@ RescueGroups.configuration do |config|
   config.apikey = ENV['API_KEY'] || ''
 end
 
-require_relative '../lib/clients/base_client'
+require_relative '../lib/remote_client'
