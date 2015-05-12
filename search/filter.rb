@@ -6,7 +6,7 @@ class Filter
                   greaterthan greaterthanorequal
                   contains notcontain
                   blank notblank
-                  radius]
+                  radius].freeze
 
   def initialize(name, operation, criteria)
     @name      = name

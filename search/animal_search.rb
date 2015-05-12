@@ -5,13 +5,13 @@ class AnimalSearch
   attr_accessor :start, :limit, :sort, :order,
                 :calc_found_rows, :fields, :filters
 
-  def initialize(start = 0, limit = 10, sort = :animalID, order = :asc, fields = [])
+  def initialize(start = 0, limit = 10, sort = :animalID, order = :asc, fields = AnimalField.all)
     @start           = start
     @limit           = limit
     @sort            = sort
     @order           = order
     @calc_found_rows = 'Yes'
-    @fields          = fields || AnimalField.all
+    @fields          = fields
     @filters         = []
   end
 

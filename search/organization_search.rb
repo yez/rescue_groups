@@ -5,28 +5,30 @@ class OrganizationSearch
   attr_accessor :start, :limit, :sort, :order,
                 :calc_found_rows, :fields, :filters
 
-  def initialize(start = 0, limit = 10, sort = nil, order = :asc, fields = [])
+  class << self
+    def client
+      @client ||= OrganizationClient.new
+    end
+
+    def find(ids)
+      ids_array = Array.wrap(ids)
+      results = client.where(id: ids)
+      ids_array.length = 1 ? results.first : results
+    end
+  end
+
+  def initialize(start = 0, limit = 10, sort = nil, order = :asc, fields = OrganizationField.all)
     @start           = start
     @limit           = limit
     @sort            = sort
     @order           = order
     @calc_found_rows = 'Yes'
-    @fields          = fields || OrganizationField.all
+    @fields          = fields
     @filters         = []
   end
 
   def add_filter(name, assertion, equals)
     @filters << Filter.new(filter_name(name), assertion, filter_value(equals))
-  end
-
-  def filter_name(name)
-    OrganizationField::FIELDS[name]
-  end
-
-  def filter_value(value)
-    {
-
-    }[value.to_sym] || value
   end
 
   def as_json(*args)
@@ -43,5 +45,17 @@ class OrganizationSearch
 
   def to_json(*)
     JSON(as_json)
+  end
+
+  private
+
+  def filter_name(name)
+    OrganizationField::FIELDS[name]
+  end
+
+  def filter_value(value)
+    {
+
+    }[value.to_sym] || value
   end
 end
