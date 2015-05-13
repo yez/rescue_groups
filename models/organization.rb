@@ -8,7 +8,7 @@ class Organization < RemoteClient
 
       find_body = post_body(:publicView).tap do |body|
         body[:fields] = OrganizationField.all
-        body[:values] = ids_array.map { |i| { OrganizationField::FIELDS[:id] => i} }
+        body[:values] = ids_array.map { |i| { OrganizationField::FIELDS[:id] => i } }
       end
 
       post_and_respond(find_body)
@@ -44,13 +44,8 @@ class Organization < RemoteClient
 
   def initialize(attribute_hash)
     attribute_hash.each do |key, value|
-      begin
-        mapped_method = OrganizationField::FIELDS.key(key.to_sym)
-        self.send("#{ mapped_method }=", value)
-      rescue Exception => e
-        require 'pry'
-        binding.pry
-      end
+      mapped_method = OrganizationField::FIELDS.key(key.to_sym)
+      self.send("#{ mapped_method }=", value)
     end
   end
 end
