@@ -15,5 +15,13 @@ describe Organization do
         expect(org.id.to_i).to eq(TEST_ORG_ID)
       end
     end
+
+    context 'org is not found' do
+      it 'raises an error' do
+        expect do
+          described_class.find(NOT_FOUND_ORG_ID)
+        end.to raise_error("Unable to find org with id: #{ NOT_FOUND_ORG_ID }")
+      end
+    end
   end
 end

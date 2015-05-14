@@ -1,5 +1,7 @@
 require 'httparty'
 
+class RecordNotFound < StandardError; end
+
 class RemoteClient
   include HTTParty
 
@@ -21,6 +23,8 @@ class RemoteClient
 
     def post_and_respond(post_body)
       response = post(base_uri, { body: JSON(post_body.merge(default_params)) })
+
+      raise RecordNotFound if response.code == 404
 
       response['data'].map do |key, found_obj|
         attributes = found_obj.nil? ? key : found_obj

@@ -14,6 +14,8 @@ class Organization < RemoteClient
       orgs = post_and_respond(find_body)
 
       ids_array.length == 1 ? orgs.first : orgs
+    rescue RecordNotFound
+      raise "Unable to find org with id: #{ ids }"
     end
 
     def where(conditions)
