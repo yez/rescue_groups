@@ -11,7 +11,9 @@ class Organization < RemoteClient
         body[:values] = ids_array.map { |i| { OrganizationField::FIELDS[:id] => i } }
       end
 
-      post_and_respond(find_body)
+      orgs = post_and_respond(find_body)
+
+      ids_array.length == 1 ? orgs.first : orgs
     end
 
     def where(conditions)

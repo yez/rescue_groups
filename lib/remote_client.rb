@@ -22,8 +22,8 @@ class RemoteClient
     def post_and_respond(post_body)
       response = post(base_uri, { body: JSON(post_body.merge(default_params)) })
 
-      response['data'].map do |key, found_org|
-        attributes = found_org.nil? ? key : found_org
+      response['data'].map do |key, found_obj|
+        attributes = found_obj.nil? ? key : found_obj
         new(attributes)
       end
     end
