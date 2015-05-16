@@ -65,8 +65,17 @@ module RescueGroups
 
     def initialize(attribute_hash)
       attribute_hash.each do |key, value|
-        mapped_method = OrganizationField::FIELDS.key(key.to_sym)
-        self.send("#{ mapped_method }=", value)
+        mapped_method = "#{ OrganizationField::FIELDS.key(key.to_sym) }="
+        next unless self.respond_to?(mapped_method)
+        self.send(mapped_method, value)
+      end
+    end
+
+    def attributes
+      {}.tap do |hash|
+        OrganizationField::FIELDS.keys.each do |attribute|
+          hash[attribute] = instance_variable_get(:"@#{ attribute }")
+        end
       end
     end
   end
