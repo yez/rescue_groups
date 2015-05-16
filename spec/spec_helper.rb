@@ -20,7 +20,7 @@ end
 RSpec.configure do |config|
   fixtures_dir = "#{ File.dirname(__FILE__) }/fixtures/"
 
-  config.before do
+  config.before(:each) do
     stub_request(
       :post,
       'https://api.rescuegroups.org/http/json?apikey=')

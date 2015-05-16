@@ -67,7 +67,7 @@ module RescueGroups
         it 'raises an error' do
           expect do
             described_class.find(NOT_FOUND_ORG_ID)
-          end.to raise_error("Unable to find org with id: #{ NOT_FOUND_ORG_ID }")
+          end.to raise_error("Unable to find #{ described_class } with id: #{ NOT_FOUND_ORG_ID }")
         end
       end
     end
@@ -99,7 +99,7 @@ module RescueGroups
             .to receive(:add_filter)
             .with(:orgCity, :equal, 'test city')
 
-          allow(described_class)
+          allow_any_instance_of(RemoteClient)
             .to receive(:post_and_respond) { TestResponse.new }
 
           described_class.where(conditions)
@@ -112,7 +112,7 @@ module RescueGroups
             end.to_not raise_error
           end
 
-          it 'it does not error' do
+          it 'sets the names correctly' do
             orgs = described_class.where(name: TEST_ORG_NAME)
 
             expect(orgs).to_not eq([])
