@@ -4,10 +4,12 @@ require 'webmock/rspec'
 
 WebMock.disable_net_connect!(allow_localhost: true)
 
-TEST_ORG_ID        = 660
-TEST_ORG_NAME      = 'All Texas Dachshund Rescue'
-NOT_FOUND_ORG_NAME = 'Bad Dogs Only'
-NOT_FOUND_ORG_ID   = -1
+TEST_ORG_ID            = 660
+TEST_ORG_NAME          = 'All Texas Dachshund Rescue'
+NOT_FOUND_ORG_NAME     = 'Bad Dogs Only'
+NOT_FOUND_ORG_ID       = -1
+TEST_ANIMAL_BREED      = 'Corgi'
+NOT_FOUND_ANIMAL_BREED = 'banana'
 
 class TestResponse
   attr_reader :http_status_code, :parsed_body
@@ -102,6 +104,62 @@ RSpec.configure do |config|
               criteria: NOT_FOUND_ORG_NAME
             }],
             fields: OrganizationField.all,
+          },
+          apikey: ''
+        }),
+        headers: { 'Content-Type' => 'application/json' })
+      .to_return(
+        status: 200,
+        body: '{ "data": [] }',
+        headers: { 'Content-Type' => 'application/json' })
+
+    stub_request(
+      :post,
+      'https://api.rescuegroups.org/http/json?apikey=')
+      .with(
+        body: JSON({
+          objectAction: :publicSearch,
+          objectType: :animals,
+          search: {
+            resultStart: 0,
+            resultLimit: 10,
+            resultSort: nil,
+            resultOrder: :asc,
+            calcFoundRows: 'Yes',
+            filters: [{
+              fieldName: :animalBreed,
+              operation: :equal,
+              criteria: TEST_ANIMAL_BREED
+            }],
+            fields: AnimalField.all,
+          },
+          apikey: ''
+        }),
+        headers: { 'Content-Type' => 'application/json' })
+      .to_return(
+        status: 200,
+        body: File.read("#{ fixtures_dir }/animal/where.json"),
+        headers: { 'Content-Type' => 'application/json' })
+
+    stub_request(
+      :post,
+      'https://api.rescuegroups.org/http/json?apikey=')
+      .with(
+        body: JSON({
+          objectAction: :publicSearch,
+          objectType: :animals,
+          search: {
+            resultStart: 0,
+            resultLimit: 10,
+            resultSort: nil,
+            resultOrder: :asc,
+            calcFoundRows: 'Yes',
+            filters: [{
+              fieldName: :animalBreed,
+              operation: :equal,
+              criteria: NOT_FOUND_ANIMAL_BREED
+            }],
+            fields: AnimalField.all,
           },
           apikey: ''
         }),

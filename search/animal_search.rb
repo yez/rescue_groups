@@ -5,7 +5,7 @@ class AnimalSearch
   attr_accessor :start, :limit, :sort, :order,
                 :calc_found_rows, :fields, :filters
 
-  def initialize(start = 0, limit = 10, sort = :animalID, order = :asc, fields = AnimalField.all)
+  def initialize(start = 0, limit = 10, sort = nil, order = :asc, fields = AnimalField.all)
     @start           = start
     @limit           = limit
     @sort            = sort
@@ -16,17 +16,7 @@ class AnimalSearch
   end
 
   def add_filter(name, assertion, equals)
-    @filters << Filter.new(filter_name(name), assertion, filter_value(equals))
-  end
-
-  def filter_name(name)
-    AnimalField::FIELDS[name]
-  end
-
-  def filter_value(value)
-    {
-      available: :Available,
-    }[value.to_sym] || value
+    @filters << Filter.new(name, assertion, equals)
   end
 
   def as_json(*args)
