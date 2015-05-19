@@ -7,3 +7,5 @@ RescueGroups.configuration do |config|
 end
 
 require_relative '../lib/remote_client'
+require_relative '../models/animal'
+require_relative '../models/organization'
