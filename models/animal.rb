@@ -1,9 +1,11 @@
+require_relative '../lib/remote_model'
 require_relative '../lib/queryable'
 require_relative '../lib/api_client'
 require_relative '../search/animal_search'
 
 module RescueGroups
   class Animal
+    include RemoteModel
     include Queryable
     include ApiClient
 
@@ -21,22 +23,6 @@ module RescueGroups
       end
     end
 
-    attr_accessor *AnimalField::FIELDS.keys
-
-    def initialize(attribute_hash)
-      attribute_hash.each do |key, value|
-        mapped_method = "#{ AnimalField::FIELDS.key(key.to_sym) }="
-        next unless self.respond_to?(mapped_method)
-        self.send(mapped_method, value)
-      end
-    end
-
-    def attributes
-      {}.tap do |hash|
-        AnimalField::FIELDS.keys.each do |attribute|
-          hash[attribute] = instance_variable_get(:"@#{ attribute }")
-        end
-      end
-    end
+    attr_accessor *object_fields::FIELDS.keys
   end
 end
