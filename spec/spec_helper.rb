@@ -8,10 +8,14 @@ TEST_ORG_ID            = 660
 TEST_ORG_NAME          = 'All Texas Dachshund Rescue'
 TEST_ANIMAL_BREED      = 'Corgi'
 TEST_ANIMAL_ID         = 1001923
+TEST_EVENT_ID          = 36385
+TEST_EVENT_NAME        = 'Weekly Mobile Adoption Event!!!'
 NOT_FOUND_ORG_NAME     = 'Bad Dogs Only'
 NOT_FOUND_ORG_ID       = -1
-NOT_FOUND_ANIMAL_ID    = -1
 NOT_FOUND_ANIMAL_BREED = 'banana'
+NOT_FOUND_ANIMAL_ID    = -1
+NOT_FOUND_EVENT_ID     = -1
+NOT_FOUND_EVENT_NAME   = 'No no doge'
 
 class TestResponse
   attr_reader :http_status_code, :parsed_body
@@ -203,6 +207,96 @@ RSpec.configure do |config|
       .to_return(
         status: 404,
         body: '{}',
+        headers: { 'Content-Type' => 'application/json' })
+
+    stub_request(
+      :post,
+      'https://api.rescuegroups.org/http/json?apikey=')
+      .with(
+        body: JSON({
+          objectAction: :publicView,
+          objectType: :events,
+          fields: EventField.all,
+          values: [{ eventID: TEST_EVENT_ID }],
+          apikey: ''
+        }),
+        headers: { 'Content-Type' => 'application/json' })
+      .to_return(
+        status: 200,
+        body: File.read("#{ fixtures_dir }/event/find.json"),
+        headers: { 'Content-Type' => 'application/json' })
+
+    stub_request(
+      :post,
+      'https://api.rescuegroups.org/http/json?apikey=')
+      .with(
+        body: JSON({
+          objectAction: :publicView,
+          objectType: :events,
+          fields: EventField.all,
+          values: [{ eventID: NOT_FOUND_EVENT_ID }],
+          apikey: ''
+        }),
+        headers: { 'Content-Type' => 'application/json' })
+      .to_return(
+        status: 404,
+        body: '{}',
+        headers: { 'Content-Type' => 'application/json' })
+
+    stub_request(
+      :post,
+      'https://api.rescuegroups.org/http/json?apikey=')
+      .with(
+        body: JSON({
+          objectAction: :publicSearch,
+          objectType: :events,
+          search: {
+            resultStart: 0,
+            resultLimit: 10,
+            resultSort: nil,
+            resultOrder: :asc,
+            calcFoundRows: 'Yes',
+            filters: [{
+              fieldName: :eventName,
+              operation: :equal,
+              criteria: TEST_EVENT_NAME
+            }],
+            fields: EventField.all,
+          },
+          apikey: ''
+        }),
+        headers: { 'Content-Type' => 'application/json' })
+      .to_return(
+        status: 200,
+        body: File.read("#{ fixtures_dir }/event/where.json"),
+        headers: { 'Content-Type' => 'application/json' })
+
+    stub_request(
+      :post,
+      'https://api.rescuegroups.org/http/json?apikey=')
+      .with(
+        body: JSON({
+          objectAction: :publicSearch,
+          objectType: :events,
+          search: {
+            resultStart: 0,
+            resultLimit: 10,
+            resultSort: nil,
+            resultOrder: :asc,
+            calcFoundRows: 'Yes',
+            filters: [{
+              fieldName: :eventName,
+              operation: :equal,
+              criteria: NOT_FOUND_EVENT_NAME
+            }],
+            fields: EventField.all,
+          },
+          apikey: ''
+        }),
+        headers: { 'Content-Type' => 'application/json' })
+      .to_return(
+        status: 200,
+        body: '{ "data": [] }',
         headers: { 'Content-Type' => 'application/json' })
   end
 end

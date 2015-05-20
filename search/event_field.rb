@@ -8,7 +8,7 @@ class EventField
     url:                  :eventUrl,
     description:          :eventDescription,
     location_id:          :eventLocationID,
-    location_distance:    :eventLocationDistance,
+    # location_distance:    :eventLocationDistance, # seems to have been deprecated
     species:              :eventSpecies,
     location_name:        :locationName,
     location_url:         :locationUrl,
