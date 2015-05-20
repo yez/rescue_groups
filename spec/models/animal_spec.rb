@@ -60,6 +60,29 @@ module RescueGroups
       end
     end
 
+    describe '.find' do
+      context 'animal is found' do
+        it 'does not raise error' do
+          expect do
+            described_class.find(TEST_ANIMAL_ID)
+          end.to_not raise_error
+        end
+
+        it 'finds and fills the animal' do
+          animal = described_class.find(TEST_ANIMAL_ID)
+          expect(animal.id.to_i).to eq(TEST_ANIMAL_ID)
+        end
+      end
+
+      context 'animal is not found' do
+        it 'raises an error' do
+          expect do
+            described_class.find(NOT_FOUND_ANIMAL_ID)
+          end.to raise_error("Unable to find #{ described_class } with id: #{ NOT_FOUND_ANIMAL_ID }")
+        end
+      end
+    end
+
     describe '.where' do
       context 'when only id is present' do
         let(:id) { 1 }

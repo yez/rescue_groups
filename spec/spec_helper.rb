@@ -6,9 +6,11 @@ WebMock.disable_net_connect!(allow_localhost: true)
 
 TEST_ORG_ID            = 660
 TEST_ORG_NAME          = 'All Texas Dachshund Rescue'
+TEST_ANIMAL_BREED      = 'Corgi'
+TEST_ANIMAL_ID         = 1001923
 NOT_FOUND_ORG_NAME     = 'Bad Dogs Only'
 NOT_FOUND_ORG_ID       = -1
-TEST_ANIMAL_BREED      = 'Corgi'
+NOT_FOUND_ANIMAL_ID    = -1
 NOT_FOUND_ANIMAL_BREED = 'banana'
 
 class TestResponse
@@ -167,6 +169,40 @@ RSpec.configure do |config|
       .to_return(
         status: 200,
         body: '{ "data": [] }',
+        headers: { 'Content-Type' => 'application/json' })
+
+    stub_request(
+      :post,
+      'https://api.rescuegroups.org/http/json?apikey=')
+      .with(
+        body: JSON({
+          objectAction: :publicView,
+          objectType: :animals,
+          fields: AnimalField.all,
+          values: [{ animalID: TEST_ANIMAL_ID }],
+          apikey: ''
+        }),
+        headers: { 'Content-Type' => 'application/json' })
+      .to_return(
+        status: 200,
+        body: File.read("#{ fixtures_dir }/animal/find.json"),
+        headers: { 'Content-Type' => 'application/json' })
+
+    stub_request(
+      :post,
+      'https://api.rescuegroups.org/http/json?apikey=')
+      .with(
+        body: JSON({
+          objectAction: :publicView,
+          objectType: :animals,
+          fields: AnimalField.all,
+          values: [{ animalID: NOT_FOUND_ANIMAL_ID }],
+          apikey: ''
+        }),
+        headers: { 'Content-Type' => 'application/json' })
+      .to_return(
+        status: 404,
+        body: '{}',
         headers: { 'Content-Type' => 'application/json' })
   end
 end
