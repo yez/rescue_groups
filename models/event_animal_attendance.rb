@@ -1,25 +1,25 @@
 require_relative '../lib/remote_model'
 require_relative '../lib/queryable'
 require_relative '../lib/api_client'
-require_relative '../search/event_search'
+require_relative '../search/event_animal_attendance_search'
 
 module RescueGroups
-  class Event
+  class EventAnimalAttendance
     include RemoteModel
     include Queryable
     include ApiClient
 
     class << self
       def object_type
-        :events
+        :eventanimalattendance
       end
 
       def object_fields
-        EventField
+        EventAnimalAttendance
       end
 
       def search_engine_class
-        EventSearch
+        EventAnimalAttendanceSearch
       end
     end
 
