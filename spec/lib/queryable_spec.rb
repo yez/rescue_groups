@@ -37,7 +37,19 @@ module RescueGroups
 
           it 'calls new with the data' do
             expect(TestClass).to receive(:new).with(data.first)
-            TestClass.find(anything)
+            response = TestClass.find(anything)
+            expect(response).to_not be_a(Array)
+          end
+
+          context 'multiple ids are returned' do
+            let(:data) { [{ foo: :bar }, { baz: :qux }] }
+
+            it 'returns an array of objects' do
+              expect(TestClass).to receive(:new).twice
+              response = TestClass.find([anything, anything])
+              expect(response).to be_a(Array)
+              expect(response.length).to eq(2)
+            end
           end
         end
 
