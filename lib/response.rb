@@ -14,7 +14,7 @@ module RescueGroups
     end
 
     def success?
-      [1, 2].include?(@http_status_code / 100)
+      @parsed_body['status'] != 'error'
     end
   end
 end

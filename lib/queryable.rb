@@ -15,7 +15,9 @@ module RescueGroups
 
             response = api_client.post_and_respond(find_body)
 
-            fail "Unable to find #{ self.name } with id: #{ ids }" unless response.success?
+            unless response.success? && !response['data'].nil? && !response['data'].empty?
+              fail "Unable to find #{ self.name } with id: #{ ids }"
+            end
 
             objects = response['data'].map { |data| new(data) }
 
