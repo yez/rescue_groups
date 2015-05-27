@@ -100,7 +100,7 @@ module RescueGroups
             .with(:orgCity, :equal, 'test city')
 
           allow_any_instance_of(RemoteClient)
-            .to receive(:post_and_respond) { TestResponse.new }
+            .to receive(:post_and_respond) { TestResponse.new(anything, anything) }
 
           described_class.where(conditions)
         end

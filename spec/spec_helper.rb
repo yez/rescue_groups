@@ -20,6 +20,15 @@ NOT_FOUND_EVENT_NAME   = 'No no doge'
 class TestResponse
   attr_reader :http_status_code, :parsed_body
 
+  def initialize(code, body)
+    @http_status_code = http_status_code
+    @parsed_body      = body
+  end
+
+  def [](attribute)
+    parsed_body[attribute]
+  end
+
   def success?
     false
   end
