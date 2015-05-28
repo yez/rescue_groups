@@ -76,5 +76,55 @@ module RescueGroups
         end
       end
     end
+
+    describe '.where' do
+      before do
+        obj = Object.new
+        allow(obj).to receive(:as_json) { {} }
+        allow(TestClass).to receive_message_chain(:search_engine_class, :new) { obj }
+        allow(TestClass)
+          .to receive_message_chain(:api_client, :post_and_respond) { response }
+      end
+
+      context 'response is successful' do
+        context 'data is returned' do
+          let(:response) do
+            TestResponse.new(200,
+              { 'status' => 'ok', 'data' => { id: anything, another_id: anything } })
+          end
+
+          it 'returns the data as an array' do
+            expect(TestClass).to receive(:new).twice
+            response = TestClass.where(anything: anything)
+            expect(response).to be_a(Array)
+          end
+        end
+
+        context 'no data is returned' do
+          let(:response) do
+            TestResponse.new(200,
+              { 'status' => 'ok', 'data' => { } })
+          end
+
+          it 'returns an empty array' do
+            response = TestClass.where(anything: anything)
+            expect(response).to eq([])
+          end
+        end
+      end
+
+      context 'response is not successful' do
+        let(:response) do
+          TestResponse.new(200,
+            { 'status' => 'error', 'data' => nil })
+        end
+
+        it 'raises error' do
+          expect do
+            TestClass.where(anything: anything)
+          end.to raise_error(/Problem with request/)
+        end
+      end
+    end
   end
 end

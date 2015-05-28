@@ -14,7 +14,11 @@ module RescueGroups
     end
 
     def success?
-      @parsed_body['status'] != 'error'
+      self['status'] != 'error'
+    end
+
+    def error
+      self['messages']['generalMessages'].map { |m| m['messageText'] }
     end
   end
 end

@@ -41,7 +41,7 @@ module RescueGroups
 
             response = api_client.post_and_respond(where_body)
 
-            return [] unless response.success?
+            fail("Problem with request #{ response.error }") unless response.success?
 
             response['data'].map do |_data_id, data|
               new(data)

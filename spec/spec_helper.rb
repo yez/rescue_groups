@@ -30,7 +30,11 @@ class TestResponse
   end
 
   def success?
-    false
+    @parsed_body['status'] != 'error'
+  end
+
+  def error
+    'It did not work'
   end
 end
 
