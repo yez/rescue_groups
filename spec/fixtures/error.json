@@ -3,10 +3,18 @@
   "messages": {
     "generalMessages": [
       {
+        "messageID": "1020",
+        "messageCriticality": "warning",
+        "messageText": "You provided an invalid result sort field.  We used the object's default sort field instead."
+      },
+      {
+        "messageID": "1021",
         "messageCriticality": "error",
-        "messageText": "General API error.",
-        "messageID": "1000"
+        "messageText": "You provided an invalid filter field name."
       }
-    ]
-  }
+    ],
+    "recordMessages": []
+  },
+  "foundRows": 0,
+  "data": []
 }

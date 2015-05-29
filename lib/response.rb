@@ -19,7 +19,9 @@ module RescueGroups
 
     def error
       unless success?
-        self['messages']['generalMessages'].map { |m| m['messageText'] }.join("\n")
+        self['messages']['generalMessages'].map do |m|
+          m['messageText'] if m['messageCriticality'] == 'error'
+        end.compact.join("\n")
       end
     end
   end

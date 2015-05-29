@@ -69,7 +69,11 @@ module RescueGroups
         end
 
         it 'returns the error message' do
-          expect(subject.error).to match(/General API/)
+          expect(subject.error).to_not be_nil
+        end
+
+        it 'does not return warning messages' do
+          expect(subject.error).to_not match(/You provided an invalid result sort field/)
         end
       end
 
