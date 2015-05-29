@@ -18,7 +18,9 @@ module RescueGroups
     end
 
     def error
-      self['messages']['generalMessages'].map { |m| m['messageText'] }
+      unless success?
+        self['messages']['generalMessages'].map { |m| m['messageText'] }.join("\n")
+      end
     end
   end
 end

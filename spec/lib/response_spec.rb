@@ -56,5 +56,40 @@ module RescueGroups
         end
       end
     end
+
+    describe '#error' do
+      context 'errorful response' do
+        let(:raw_response) do
+          Class.new(Object) do
+            attr_reader :code
+            def parsed_response
+              JSON.parse(File.read("#{ File.dirname(__FILE__) }/../fixtures/error.json"))
+            end
+          end.new
+        end
+
+        it 'returns the error message' do
+          expect(subject.error).to match(/General API/)
+        end
+      end
+
+      context 'successful response' do
+        let(:raw_response) do
+          Class.new(Object) do
+            attr_reader :code
+            def parsed_response
+              {
+                'status' => 'ok',
+                'data' => {}
+              }
+            end
+          end.new
+        end
+
+        it 'returns nil ' do
+          expect(subject.error).to be_nil
+        end
+      end
+    end
   end
 end
