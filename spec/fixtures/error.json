@@ -1,0 +1,12 @@
+{
+  "status": "error",
+  "messages": {
+    "generalMessages": [
+      {
+        "messageCriticality": "error",
+        "messageText": "General API error.",
+        "messageID": "1000"
+      }
+    ]
+  }
+}

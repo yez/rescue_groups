@@ -22,39 +22,38 @@ module RescueGroups
       end
     end
 
-    context 'a successful response' do
-      let(:raw_response) do
-        Class.new(Object) do
-          attr_reader :code
-          def parsed_response
-            {
-              'status' => "ok",
-              'data' => []
-            }
-          end
-        end.new
+    describe '#success?' do
+      context 'a successful response' do
+        let(:raw_response) do
+          Class.new(Object) do
+            attr_reader :code
+            def parsed_response
+              {
+                'status' => "ok",
+                'data' => []
+              }
+            end
+          end.new
+        end
+
+        specify do
+          expect(subject).to be_success
+        end
       end
 
-      specify do
-        expect(subject).to be_success
-      end
-    end
+      context 'an errorful response' do
+        let(:raw_response) do
+          Class.new(Object) do
+            attr_reader :code
+            def parsed_response
+              JSON.parse(File.read("#{ File.dirname(__FILE__) }/../fixtures/error.json"))
+            end
+          end.new
+        end
 
-    context 'an errorful response' do
-      let(:raw_response) do
-        Class.new(Object) do
-          attr_reader :code
-          def parsed_response
-            {
-              'status' => "error",
-              'data' => []
-            }
-          end
-        end.new
-      end
-
-      specify do
-        expect(subject).to_not be_success
+        specify do
+          expect(subject).to_not be_success
+        end
       end
     end
   end
