@@ -2,7 +2,7 @@ require_relative '../spec_helper'
 require_relative '../../lib/queryable'
 
 class TestClass
-  FIELDS = {}
+  FIELDS = { some_test_field: 'SomeTestField' }
   include RescueGroups::Queryable
 end
 
@@ -123,6 +123,47 @@ module RescueGroups
           expect do
             TestClass.where(anything: anything)
           end.to raise_error(/Problem with request/)
+        end
+      end
+    end
+
+    describe '.conditions_to_filters' do
+      context 'all filters have mappings' do
+        let(:conditions) { { some_test_field: value } }
+        let(:value)      { 'foo' }
+
+        it 'yields to the block for all filters' do
+          expect do |b|
+            TestClass.conditions_to_filters(conditions, &b)
+          end.to yield_with_args('SomeTestField', value)
+        end
+      end
+
+      context 'some filters have mappings, others do not' do
+        let(:conditions) { { some_test_field: value, another_test_field: anything } }
+        let(:value)      { 'foo' }
+
+        it 'yields to the block only for mapped filters' do
+          expect do |b|
+            TestClass.conditions_to_filters(conditions, &b)
+          end.to yield_with_args('SomeTestField', value)
+        end
+      end
+
+      context 'no filters have mappings' do
+        let(:conditions) { { foo: :bar } }
+        it 'does not yield to the block' do
+          expect do |b|
+            TestClass.conditions_to_filters(conditions, &b)
+          end.to_not yield_control
+        end
+      end
+
+      context 'no block is given' do
+        it 'raises an error' do
+          expect do
+            TestClass.conditions_to_filters(anything)
+          end.to raise_error(/Block not given/)
         end
       end
     end

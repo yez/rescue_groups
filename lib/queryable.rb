@@ -49,6 +49,7 @@ module RescueGroups
           end
 
           def conditions_to_filters(conditions, &block)
+            fail('Block not given') unless block_given?
             conditions.each do |key, value|
               mapped_key = object_fields::FIELDS[key.to_sym]
               next if mapped_key.nil?
