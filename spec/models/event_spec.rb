@@ -1,64 +1,13 @@
 require_relative '../spec_helper'
+require_relative '../support/model_spec'
 require_relative '../../models/event'
 
 module RescueGroups
   describe Event do
-    describe '#initialize' do
-      subject { described_class.new(attributes) }
-
-      context 'known attributes are set' do
-        let(:attributes) do
-          {
-            eventID: 12,
-            eventName: 'Great Event!',
-            eventDescription: 'This is the great event.'
-          }
-        end
-
-        it 'sets the attributes' do
-          expect(subject.id).to_not be_nil
-          expect(subject.name).to_not be_nil
-          expect(subject.description).to_not be_nil
-        end
-      end
-
-      context 'known and unknown attributes are present' do
-        let(:attributes) do
-          {
-            eventID: 12,
-            eventName: 'Great Event!',
-            eventDescription: 'This is the great event.',
-            eventHotDogs: true,
-            eventMidnightOnly: false,
-          }
-        end
-
-        it 'sets the attributes known' do
-          expect(subject.id).to_not be_nil
-          expect(subject.name).to_not be_nil
-          expect(subject.description).to_not be_nil
-        end
-
-        it 'does not include the uknown attributes' do
-          expect(subject.attributes).to_not include(:eventHotDogs)
-          expect(subject.attributes).to_not include(:eventMidnightOnly)
-        end
-      end
-
-      context 'only uknown attributes are present' do
-        let(:attributes) do
-          {
-            eventHotDogs: true,
-            eventMidnightOnly: false,
-          }
-        end
-
-        it 'does not set them' do
-          expect(subject.attributes).to_not include(:eventHotDogs)
-          expect(subject.attributes).to_not include(:eventMidnightOnly)
-        end
-      end
+    known_attributes = begin
+      { eventID: 12, eventName: 'Great Event!', eventDescription: 'This is the great event.' }
     end
+    it_behaves_like 'a model', known_attributes
 
     describe '.find' do
       context 'event is found' do

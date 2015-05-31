@@ -1,53 +1,11 @@
 require_relative '../spec_helper'
+require_relative '../support/model_spec'
 require_relative '../../models/organization'
 
 module RescueGroups
   describe Organization do
-    describe '#initialize' do
-      subject { described_class.new(attributes) }
-
-      context 'only known keys are present' do
-        let(:attributes) do
-          {
-            location_country: 'USA',
-            name: 'That one dog house',
-          }
-        end
-
-        it 'sets the attributes correctly' do
-          expect(subject.attributes).to include(*attributes.keys)
-        end
-      end
-
-      context 'mixture of known and uknown keys are present' do
-        let(:attributes) do
-          {
-            location_country: 'USA',
-            name: 'That one dog house',
-            not_a_real_attribute: 'this is it',
-            another_fake: 'foobar',
-          }
-        end
-
-        it 'only sets known attributes' do
-          expect(subject.attributes).to include(:location_country, :name)
-          expect(subject.attributes).to_not include(:not_a_real_attribute, :another_fake)
-        end
-      end
-
-      context 'only uknown keys are present' do
-        let(:attributes) do
-          {
-            not_a_real_attribute: 'this is it',
-            another_fake: 'foobar',
-          }
-        end
-
-        it 'sets no attributes' do
-          expect(subject.attributes).to_not include(:not_a_real_attribute, :another_fake)
-        end
-      end
-    end
+    known_attributes = { orgCountry: 'USA', orgName: 'That one dog house'}
+    it_behaves_like 'a model', known_attributes
 
     describe '.find' do
       context 'org is found' do
