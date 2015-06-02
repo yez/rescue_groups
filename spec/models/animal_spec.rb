@@ -89,5 +89,15 @@ module RescueGroups
         end
       end
     end
+
+    describe 'organization' do
+      it 'defines #organization' do
+        expect(subject).to respond_to(:organization)
+      end
+
+      it 'defines #organization=' do
+        expect(subject).to respond_to(:organization=)
+      end
+    end
   end
 end

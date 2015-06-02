@@ -98,5 +98,15 @@ module RescueGroups
         end
       end
     end
+
+    describe '#animals' do
+      it 'defines #animals' do
+        expect(subject).to respond_to(:animals)
+      end
+
+      it 'defines #animals=' do
+        expect(subject).to respond_to(:animals=)
+      end
+    end
   end
 end
