@@ -1,6 +1,5 @@
 require_relative '../lib/remote_model'
 require_relative '../lib/queryable'
-require_relative '../lib/api_client'
 require_relative '../lib/relationable'
 require_relative '../search/animal_search'
 
@@ -8,7 +7,6 @@ module RescueGroups
   class Animal
     include RemoteModel
     include Queryable
-    include ApiClient
     include Relationable
 
     belongs_to :organization
