@@ -1,66 +1,67 @@
 module RescueGroups
   module Queryable
     def self.included(base)
-      base.class_eval do
-        class << self
-          def find(ids)
-            ids_array = [*ids].flatten
+      base.extend(ClassMethods)
+    end
 
-            find_body = {
-              objectAction: :publicView,
-              objectType:   object_type,
-              fields:       object_fields.all,
-              values:       ids_array.map { |i| { object_fields::FIELDS[:id] => i } }
-            }
+    module ClassMethods
+      def find(ids)
+        ids_array = [*ids].flatten
 
-            response = api_client.post_and_respond(find_body)
+        find_body = {
+          objectAction: :publicView,
+          objectType:   object_type,
+          fields:       object_fields.all,
+          values:       ids_array.map { |i| { object_fields::FIELDS[:id] => i } }
+        }
 
-            unless response.success? && !response['data'].nil? && !response['data'].empty?
-              fail "Unable to find #{ self.name } with id: #{ ids }"
-            end
+        response = api_client.post_and_respond(find_body)
 
-            objects = response['data'].map { |data| new(data) }
+        unless response.success? && !response['data'].nil? && !response['data'].empty?
+          fail "Unable to find #{ self.name } with id: #{ ids }"
+        end
 
-            ids_array.length == 1 ? objects.first : objects
-          end
+        objects = response['data'].map { |data| new(data) }
 
-          def where(conditions)
-            return find(conditions[:id]) if conditions.keys == [:id]
+        ids_array.length == 1 ? objects.first : objects
+      end
 
-            search_engine = search_engine_class.new
+      def where(conditions)
+        return find(conditions[:id]) if conditions.keys == [:id]
 
-            conditions_to_filters(conditions) do |mapped_key, val|
-              search_engine.add_filter(mapped_key, :equal, val)
-            end
+        search_engine = search_engine_class.new
 
-            where_body = {
-              objectAction: :publicSearch,
-              objectType:   object_type,
-              search:       search_engine.as_json,
-            }
+        conditions_to_filters(conditions) do |mapped_key, val|
+          search_engine.add_filter(mapped_key, :equal, val)
+        end
 
-            response = api_client.post_and_respond(where_body)
+        where_body = {
+          objectAction: :publicSearch,
+          objectType:   object_type,
+          search:       search_engine.as_json,
+        }
 
-            fail("Problem with request #{ response.error }") unless response.success?
+        response = api_client.post_and_respond(where_body)
 
-            response['data'].map do |_data_id, data|
-              new(data)
-            end
-          end
+        fail("Problem with request #{ response.error }") unless response.success?
 
-          def conditions_to_filters(conditions, &block)
-            fail('Block not given') unless block_given?
-            conditions.each do |key, value|
-              mapped_key = object_fields::FIELDS[key.to_sym]
-              next if mapped_key.nil?
+        response['data'].map do |_data_id, data|
+          new(data)
+        end
+      end
 
-              [*value].flatten.each do |val|
-                yield mapped_key, val
-              end
-            end
+      def conditions_to_filters(conditions, &block)
+        fail('Block not given') unless block_given?
+        conditions.each do |key, value|
+          mapped_key = object_fields::FIELDS[key.to_sym]
+          next if mapped_key.nil?
+
+          [*value].flatten.each do |val|
+            yield mapped_key, val
           end
         end
       end
     end
+
   end
 end
