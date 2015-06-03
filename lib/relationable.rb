@@ -1,7 +1,5 @@
 module RescueGroups
   module Relationable
-    CAPITAL_OFFSET = 32
-
     def self.included(base)
       base.extend(ClassMethods)
     end
