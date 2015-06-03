@@ -40,11 +40,15 @@ end
 
 RSpec.configure do |config|
   fixtures_dir = "#{ File.dirname(__FILE__) }/fixtures/"
+  post_url     = 'https://api.rescuegroups.org/http/json?apikey='
+  headers      = { 'Content-Type' => 'application/json' }
+  SUCCESS      = 200
+  NOT_FOUND    = 404
 
   config.before(:each) do
     stub_request(
       :post,
-      'https://api.rescuegroups.org/http/json?apikey=')
+      post_url)
       .with(
         body: JSON({
           objectAction: :publicView,
@@ -53,15 +57,15 @@ RSpec.configure do |config|
           values: [{ orgID: TEST_ORG_ID }],
           apikey: ''
         }),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
       .to_return(
-        status: 200,
+        status: SUCCESS,
         body: File.read("#{ fixtures_dir }/organization/find.json"),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
 
     stub_request(
       :post,
-      'https://api.rescuegroups.org/http/json?apikey=')
+      post_url)
       .with(
         body: JSON({
           objectAction: :publicView,
@@ -70,15 +74,15 @@ RSpec.configure do |config|
           values: [{ orgID: NOT_FOUND_ORG_ID }],
           apikey: ''
         }),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
       .to_return(
-        status: 404,
+        status: NOT_FOUND,
         body: '{}',
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
 
     stub_request(
       :post,
-      'https://api.rescuegroups.org/http/json?apikey=')
+      post_url)
       .with(
         body: JSON({
           objectAction: :publicSearch,
@@ -98,15 +102,15 @@ RSpec.configure do |config|
           },
           apikey: ''
         }),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
       .to_return(
-        status: 200,
+        status: SUCCESS,
         body: File.read("#{ fixtures_dir }/organization/where.json"),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
 
     stub_request(
       :post,
-      'https://api.rescuegroups.org/http/json?apikey=')
+      post_url)
       .with(
         body: JSON({
           objectAction: :publicSearch,
@@ -126,15 +130,15 @@ RSpec.configure do |config|
           },
           apikey: ''
         }),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
       .to_return(
-        status: 200,
+        status: SUCCESS,
         body: '{ "data": [] }',
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
 
     stub_request(
       :post,
-      'https://api.rescuegroups.org/http/json?apikey=')
+      post_url)
       .with(
         body: JSON({
           objectAction: :publicSearch,
@@ -154,15 +158,15 @@ RSpec.configure do |config|
           },
           apikey: ''
         }),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
       .to_return(
-        status: 200,
+        status: SUCCESS,
         body: File.read("#{ fixtures_dir }/animal/where.json"),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
 
     stub_request(
       :post,
-      'https://api.rescuegroups.org/http/json?apikey=')
+      post_url)
       .with(
         body: JSON({
           objectAction: :publicSearch,
@@ -182,15 +186,15 @@ RSpec.configure do |config|
           },
           apikey: ''
         }),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
       .to_return(
-        status: 200,
+        status: SUCCESS,
         body: '{ "data": [] }',
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
 
     stub_request(
       :post,
-      'https://api.rescuegroups.org/http/json?apikey=')
+      post_url)
       .with(
         body: JSON({
           objectAction: :publicView,
@@ -199,15 +203,15 @@ RSpec.configure do |config|
           values: [{ animalID: TEST_ANIMAL_ID }],
           apikey: ''
         }),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
       .to_return(
-        status: 200,
+        status: SUCCESS,
         body: File.read("#{ fixtures_dir }/animal/find.json"),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
 
     stub_request(
       :post,
-      'https://api.rescuegroups.org/http/json?apikey=')
+      post_url)
       .with(
         body: JSON({
           objectAction: :publicView,
@@ -216,15 +220,15 @@ RSpec.configure do |config|
           values: [{ animalID: NOT_FOUND_ANIMAL_ID }],
           apikey: ''
         }),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
       .to_return(
-        status: 404,
+        status: NOT_FOUND,
         body: '{}',
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
 
     stub_request(
       :post,
-      'https://api.rescuegroups.org/http/json?apikey=')
+      post_url)
       .with(
         body: JSON({
           objectAction: :publicView,
@@ -233,15 +237,15 @@ RSpec.configure do |config|
           values: [{ eventID: TEST_EVENT_ID }],
           apikey: ''
         }),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
       .to_return(
-        status: 200,
+        status: SUCCESS,
         body: File.read("#{ fixtures_dir }/event/find.json"),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
 
     stub_request(
       :post,
-      'https://api.rescuegroups.org/http/json?apikey=')
+      post_url)
       .with(
         body: JSON({
           objectAction: :publicView,
@@ -250,15 +254,15 @@ RSpec.configure do |config|
           values: [{ eventID: NOT_FOUND_EVENT_ID }],
           apikey: ''
         }),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
       .to_return(
-        status: 404,
+        status: NOT_FOUND,
         body: '{}',
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
 
     stub_request(
       :post,
-      'https://api.rescuegroups.org/http/json?apikey=')
+      post_url)
       .with(
         body: JSON({
           objectAction: :publicSearch,
@@ -278,15 +282,15 @@ RSpec.configure do |config|
           },
           apikey: ''
         }),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
       .to_return(
-        status: 200,
+        status: SUCCESS,
         body: File.read("#{ fixtures_dir }/event/where.json"),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
 
     stub_request(
       :post,
-      'https://api.rescuegroups.org/http/json?apikey=')
+      post_url)
       .with(
         body: JSON({
           objectAction: :publicSearch,
@@ -306,10 +310,10 @@ RSpec.configure do |config|
           },
           apikey: ''
         }),
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
       .to_return(
-        status: 200,
+        status: SUCCESS,
         body: '{ "data": [] }',
-        headers: { 'Content-Type' => 'application/json' })
+        headers: headers)
   end
 end
