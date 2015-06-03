@@ -26,17 +26,6 @@ module RescueGroups
           instance_variable_set(:"@#{ relationship }", value)
         end
       end
-
-      private
-
-      def symbol_to_class(symbol)
-        return if symbol.nil?
-        class_name = symbol.to_s.split('_').map do |part|
-          "#{ (part[0].ord - CAPITAL_OFFSET).to_i.chr }#{ part[1..-1] }"
-        end.join
-
-        Object.const_get("RescueGroups::#{ class_name }")
-      end
     end
   end
 end
