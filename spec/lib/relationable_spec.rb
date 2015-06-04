@@ -28,6 +28,14 @@ module RescueGroups
         expect(subject).to respond_to(:other_class)
       end
 
+      it 'makes a setter relationship_id method' do
+        expect(subject).to respond_to(:other_class_id=)
+      end
+
+      it 'makes a getter relationship_id method' do
+        expect(subject).to respond_to(:other_class_id)
+      end
+
       context 'relationship model exists' do
         let(:other_class) { OtherClass.new }
         it 'returns a model of the specified class' do
