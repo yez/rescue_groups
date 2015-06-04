@@ -48,6 +48,15 @@ module RescueGroups
           expect(subject.other_class).to be_nil
         end
       end
+
+      context 'relationship_id is set model is not present' do
+        let(:other_class_id) { 1 }
+        it 'fetches the model' do
+          subject.other_class_id = other_class_id
+          expect(OtherClass).to receive(:find).with(other_class_id)
+          subject.other_class
+        end
+      end
     end
 
     describe '#has_many' do
