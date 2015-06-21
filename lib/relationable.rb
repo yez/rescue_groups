@@ -13,12 +13,8 @@ module RescueGroups
           relationship_id = self.send(:"#{ relationship }_id")
 
           unless relationship_id.nil?
-            klass = ''
-            relationship.to_s.split('_').each do |piece|
-              klass += "#{ (piece[0].ord - 32).to_i.chr }#{ piece[1..-1] }"
-            end
+            klass = self.class.constantize(relationship)
 
-            klass = Object.const_get("RescueGroups::#{ klass }")
             self.send(:"#{ relationship }=", klass.find(relationship_id))
           end
         end
@@ -36,8 +32,23 @@ module RescueGroups
         end
       end
 
-      def fetch_relationship(relationship)
-        []
+      def constantize(relationship)
+        klass = ''
+
+        relationship.to_s.split('_').each do |piece|
+          klass += "#{ (piece[0].ord - 32).to_i.chr }#{ piece[1..-1] }"
+        end
+
+        begin
+          Object.const_get("RescueGroups::#{ klass }")
+        rescue NameError => e
+          # remove trailing s or es in case of has_many :animals
+          if klass[-2..-1] == 'es'
+            Object.const_get("RescueGroups::#{ klass[0..-3] }")
+          else
+            Object.const_get("RescueGroups::#{ klass[0..-2] }")
+          end
+        end
       end
 
       def has_many(relationship)
