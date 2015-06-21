@@ -62,6 +62,5 @@ module RescueGroups
         end
       end
     end
-
   end
 end
