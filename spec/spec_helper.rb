@@ -178,6 +178,34 @@ RSpec.configure do |config|
             resultOrder: :asc,
             calcFoundRows: 'Yes',
             filters: [{
+              fieldName: :animalOrgID,
+              operation: :equal,
+              criteria: TEST_ORG_ID
+            }],
+            fields: AnimalField.all,
+          },
+          apikey: ''
+        }),
+        headers: headers)
+      .to_return(
+        status: SUCCESS,
+        body: File.read("#{ fixtures_dir }/animal/where.json"),
+        headers: headers)
+
+    stub_request(
+      :post,
+      post_url)
+      .with(
+        body: JSON({
+          objectAction: :publicSearch,
+          objectType: :animals,
+          search: {
+            resultStart: 0,
+            resultLimit: 10,
+            resultSort: nil,
+            resultOrder: :asc,
+            calcFoundRows: 'Yes',
+            filters: [{
               fieldName: :animalBreed,
               operation: :equal,
               criteria: NOT_FOUND_ANIMAL_BREED

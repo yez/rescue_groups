@@ -1,7 +1,7 @@
 class AnimalField
   FIELDS = {
     id:                        :animalID,
-    org_id:                    :animalOrgID,
+    organization_id:           :animalOrgID,
     activity_level:            :animalActivityLevel,
     adoption_fee:              :animalAdoptionFee,
     altered:                   :animalAltered,

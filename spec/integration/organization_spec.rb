@@ -5,7 +5,7 @@ module RescueGroups
   describe Organization do
     describe 'animals' do
       context 'given an organization' do
-        let(:organization) { Organization.new(id: TEST_ORG_ID, animals: animals) }
+        let(:organization) { o = Organization.new; o.id = TEST_ORG_ID; o.animals =  animals; o }
 
         context 'the animals array does not exist in memory' do
           let(:animals) { [] }
@@ -14,10 +14,9 @@ module RescueGroups
             expect(organization.animals).to_not be_empty
           end
 
-          it 'is a list of animals with the correct organzation_id' do
+          it 'is a list of animals' do
             organization.animals.each do |animal|
               expect(animal).to be_a(Animal)
-              expect(animal.organization_id).to eq(organization.id)
             end
           end
         end
