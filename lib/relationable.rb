@@ -36,9 +36,13 @@ module RescueGroups
         end
       end
 
+      def fetch_relationship(relationship)
+        []
+      end
+
       def has_many(relationship)
         define_method relationship do
-          instance_variable_get(:"@#{ relationship }") || []
+          instance_variable_get(:"@#{ relationship }") || self.class.fetch_relationship(relationship)
         end
 
         define_method :"#{ relationship }=" do |value|
