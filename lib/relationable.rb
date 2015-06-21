@@ -53,7 +53,13 @@ module RescueGroups
 
       def has_many(relationship)
         define_method relationship do
-          instance_variable_get(:"@#{ relationship }") || self.class.fetch_relationship(relationship)
+          temp = instance_variable_get(:"@#{ relationship }")
+
+          return temp unless temp.nil? || temp.empty?
+
+          klass = self.class.constantize(relationship)
+          foreign_key = "#{ self.class.to_s.split('::').last.downcase }_id"
+          klass.where(foreign_key.to_sym => @id)
         end
 
         define_method :"#{ relationship }=" do |value|
