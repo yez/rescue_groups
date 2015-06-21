@@ -2,7 +2,11 @@ require_relative '../../lib/relationable'
 
 module RescueGroups
   class OtherClass;end
-  class YetAnotherClass;end
+
+  class YetAnotherClass
+    def self.where(anything); [] end
+  end
+
   class IncludedClass
     include Relationable
     belongs_to :other_class
@@ -71,6 +75,7 @@ module RescueGroups
       context 'relationship models exist' do
         let(:yet_another_class)   { YetAnotherClass.new }
         let(:yet_another_classes) { [yet_another_class] }
+
         context 'one model exists' do
           it 'returns an array of size 1' do
             expect(subject.yet_another_classes.length).to eq(1)
