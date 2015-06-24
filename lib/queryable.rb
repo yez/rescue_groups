@@ -1,10 +1,18 @@
 module RescueGroups
   module Queryable
+    # This method is called when the Queryable Module is included
+    #   in a class.
     def self.included(base)
       base.extend(ClassMethods)
     end
 
     module ClassMethods
+      # method: find
+      # purpose: find one or many objects by primary key (id)
+      # param: ids Array<Integer> primary key(s) of object(s) that will
+      #          be requested
+      # return: One found object if one id was given, otherwise an array of found objects
+      #         If the response was not successful, an exception is thrown
       def find(ids)
         ids_array = [*ids].flatten
 
@@ -26,6 +34,13 @@ module RescueGroups
         ids_array.length == 1 ? objects.first : objects
       end
 
+      # method: where
+      # purpose: find one or many objects by any supported filters
+      # param: conditions - <Hash> - mutliple keyed hash containing
+      #          the conditions to search against.
+      #        example: { breed: 'daschund' }
+      # return: An array of found objects
+      #         If the response was not successful, an exception is thrown
       def where(conditions)
         return find(conditions[:id]) if conditions.keys == [:id]
 
@@ -50,6 +65,14 @@ module RescueGroups
         end
       end
 
+      private
+      # method: conditions_to_filters
+      # purpose: map conditional arguments given to
+      #          their corresponding filters
+      # example: conditions_to_filters(eye_color: 'brown')
+      #          #=> Filter.new(name: 'animalEyeColor', operation: 'equal', criteria: 'brown')
+      # params: conditions - <Hash> - conditions passed from .where
+      #         block - <Block> - evaluated block with the mapped key and value
       def conditions_to_filters(conditions, &block)
         fail('Block not given') unless block_given?
         conditions.each do |key, value|
