@@ -127,14 +127,14 @@ module RescueGroups
       end
     end
 
-    describe '.conditions_to_filters' do
+    describe '!.conditions_to_filters' do
       context 'all filters have mappings' do
         let(:conditions) { { some_test_field: value } }
         let(:value)      { 'foo' }
 
         it 'yields to the block for all filters' do
           expect do |b|
-            TestClass.conditions_to_filters(conditions, &b)
+            TestClass.send(:conditions_to_filters, conditions, &b)
           end.to yield_with_args('SomeTestField', value)
         end
       end
@@ -145,7 +145,7 @@ module RescueGroups
 
         it 'yields to the block only for mapped filters' do
           expect do |b|
-            TestClass.conditions_to_filters(conditions, &b)
+            TestClass.send(:conditions_to_filters, conditions, &b)
           end.to yield_with_args('SomeTestField', value)
         end
       end
@@ -154,7 +154,7 @@ module RescueGroups
         let(:conditions) { { foo: :bar } }
         it 'does not yield to the block' do
           expect do |b|
-            TestClass.conditions_to_filters(conditions, &b)
+            TestClass.send(:conditions_to_filters, conditions, &b)
           end.to_not yield_control
         end
       end
@@ -162,7 +162,7 @@ module RescueGroups
       context 'no block is given' do
         it 'raises an error' do
           expect do
-            TestClass.conditions_to_filters(anything)
+            TestClass.send(:conditions_to_filters, anything)
           end.to raise_error(/Block not given/)
         end
       end
