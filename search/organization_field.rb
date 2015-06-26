@@ -27,6 +27,11 @@ class OrganizationField
     website_url:               :orgWebsiteUrl,
   }
 
+  # method: all
+  # purpose: Return the values of FIELDS for easy use in
+  #            requesting fields from the remote API
+  # param: none
+  # return: <Array[Symbol]> - All defined field names
   def self.all
     FIELDS.values
   end
