@@ -4,8 +4,7 @@ require_relative '../lib/relationable'
 require_relative '../search/animal_search'
 
 module RescueGroups
-  class Animal
-    include RemoteModel
+  class Animal < RemoteModel
     include Queryable
     include Relationable
 

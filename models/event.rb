@@ -4,8 +4,7 @@ require_relative '../lib/relationable'
 require_relative '../search/event_search'
 
 module RescueGroups
-  class Event
-    include RemoteModel
+  class Event < RemoteModel
     include Queryable
     include Relationable
 
