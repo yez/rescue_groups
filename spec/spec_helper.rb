@@ -1,21 +1,9 @@
 require_relative '../config/initializer'
 require 'pry'
 require 'webmock/rspec'
+require_relative './fixtures/test_constants'
 
 WebMock.disable_net_connect!(allow_localhost: true)
-
-TEST_ORG_ID            = 660
-TEST_ORG_NAME          = 'All Texas Dachshund Rescue'
-TEST_ANIMAL_BREED      = 'Corgi'
-TEST_ANIMAL_ID         = 1001923
-TEST_EVENT_ID          = 36385
-TEST_EVENT_NAME        = 'Weekly Mobile Adoption Event!!!'
-NOT_FOUND_ORG_NAME     = 'Bad Dogs Only'
-NOT_FOUND_ORG_ID       = -1
-NOT_FOUND_ANIMAL_BREED = 'banana'
-NOT_FOUND_ANIMAL_ID    = -1
-NOT_FOUND_EVENT_ID     = -1
-NOT_FOUND_EVENT_NAME   = 'No no doge'
 
 class TestResponse
   attr_reader :http_status_code, :parsed_body

@@ -15,15 +15,7 @@ module RescueGroups
       #         If the response was not successful, an exception is thrown
       def find(ids)
         ids_array = [*ids].flatten
-
-        find_body = {
-          objectAction: :publicView,
-          objectType:   object_type,
-          fields:       object_fields.all,
-          values:       ids_array.map { |i| { object_fields::FIELDS[:id] => i } }
-        }
-
-        response = api_client.post_and_respond(find_body)
+        response = api_client.post_and_respond(find_body(ids_array))
 
         unless response.success? && !response['data'].nil? && !response['data'].empty?
           fail "Unable to find #{ self.name } with id: #{ ids }"
@@ -32,6 +24,15 @@ module RescueGroups
         objects = response['data'].map { |data| new(data) }
 
         ids_array.length == 1 ? objects.first : objects
+      end
+
+      def find_body(ids)
+        {
+          objectAction: :publicView,
+          objectType:   object_type,
+          fields:       object_fields.all,
+          values:       ids.map { |i| { object_fields::FIELDS[:id] => i } }
+        }
       end
 
       # method: where
@@ -44,25 +45,34 @@ module RescueGroups
       def where(conditions)
         return find(conditions[:id]) if conditions.keys == [:id]
 
-        search_engine = search_engine_class.new
+        search_engine = conditions_to_search_engine(conditions)
 
-        conditions_to_filters(conditions) do |mapped_key, val|
-          search_engine.add_filter(mapped_key, :equal, val)
-        end
-
-        where_body = {
-          objectAction: :publicSearch,
-          objectType:   object_type,
-          search:       search_engine.as_json,
-        }
-
-        response = api_client.post_and_respond(where_body)
+        response = api_client.post_and_respond(where_body(search_engine))
 
         fail("Problem with request #{ response.error }") unless response.success?
 
         response['data'].map do |_data_id, data|
           new(data)
         end
+      end
+
+      def conditions_to_search_engine(conditions)
+        search_engine = search_engine_class.new
+
+        conditions_to_filters(conditions) do |mapped_key, val|
+          search_engine.add_filter(mapped_key, :equal, val)
+        end
+
+        search_engine
+      end
+
+
+      def where_body(search_engine)
+        {
+          objectAction: :publicSearch,
+          objectType:   object_type,
+          search:       search_engine.as_json,
+        }
       end
 
       private
