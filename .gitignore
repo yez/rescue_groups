@@ -1,3 +1,4 @@
 .ruby-*
+Guardfile
 scripts/*
 .ENV
