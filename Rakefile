@@ -7,9 +7,9 @@ namespace :fixtures do
     fail 'No API key given' if RescueGroups.config.apikey == ""
 
     {
-      RescueGroups::Animal => [TEST_ANIMAL_ID, breed: TEST_ANIMAL_BREED],
+      RescueGroups::Animal       => [TEST_ANIMAL_ID, breed: TEST_ANIMAL_BREED],
       RescueGroups::Organization => [TEST_ORG_ID, name: TEST_ORG_NAME],
-      RescueGroups::Event => [TEST_EVENT_ID, name: TEST_EVENT_NAME],
+      RescueGroups::Event        => [TEST_EVENT_ID, name: TEST_EVENT_NAME],
     }.each do |model, test_values|
       find_body = model.find_body([*test_values[0]].flatten)
       where_body = model.where_body(model.conditions_to_search_engine(test_values[1]))
