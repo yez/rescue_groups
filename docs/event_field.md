@@ -1,0 +1,20 @@
+## Event Fields
+* id
+* org_id
+* name
+* event_start
+* event_end
+* url
+* description
+* location_id
+* species
+* location_name
+* location_url
+* location_address
+* location_city
+* location_state
+* location_postal_code
+* location_country
+* location_phone
+* location_phone_ext
+* location_events
