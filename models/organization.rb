@@ -1,13 +1,8 @@
 require_relative '../lib/remote_model'
-require_relative '../lib/queryable'
-require_relative '../lib/relationable'
 require_relative '../search/organization_search'
 
 module RescueGroups
   class Organization < RemoteModel
-    include Queryable
-    include Relationable
-
     has_many :animals
 
     class << self

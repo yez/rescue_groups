@@ -1,8 +1,12 @@
 require_relative './api_client'
+require_relative '../lib/queryable'
+require_relative '../lib/relationable'
 
 module RescueGroups
   class RemoteModel
     include ApiClient
+    include Queryable
+    include Relationable
 
     # method: initialize
     # purpose: given a hash of attributes, assign the attributes that the
