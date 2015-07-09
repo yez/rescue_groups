@@ -15,9 +15,7 @@ module RescueGroups
 
       context 'with no api key' do
         before do
-          RescueGroups.configuration do |config|
-            config.apikey = nil
-          end
+          allow(RescueGroups.config).to receive(:apikey) { nil }
         end
 
         it 'raises an error' do
