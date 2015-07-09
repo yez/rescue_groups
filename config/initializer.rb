@@ -4,8 +4,8 @@ require 'httparty'
 require_relative './config'
 
 RescueGroups.configuration do |config|
-  # Your API key should be set in an ENV variable called API_KEY
-  config.apikey = ENV['API_KEY'] || ''
+  # Your API key should be set in an ENV variable called RESCUE_GROUPS_API_KEY
+  config.apikey = ENV['RESCUE_GROUPS_API_KEY'] || ''
 end
 
 require_relative '../lib/remote_client'
