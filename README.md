@@ -4,59 +4,72 @@ Wrapper for RescueGroups.org API
 
 ![Build Status](https://travis-ci.org/yez/rescuegroups.svg?branch=master)
 
-## Resources
+# Purpose
 
-1. Animal
-  - belongs to an organization
-  - methods:
-    - `find`
-      Find a single animal by primary key (id)
+Ruby wrapper for the [HTTP RescueGroups API](https://userguide.rescuegroups.org/display/APIDG/HTTP+API). This is a read only gem that provides basic functionality needed to read from RescueGroups.
 
-      ```ruby
-        Animal.find(1)
-        #=> <Animal id: 1, name: 'Whiskers'>
-      ```
-    - `where`
-      Search for an animal by specific [fields](docs/animal_field.md)
+# Installation
 
-      ```ruby
-        Animal.where(breed: 'daschund')
-        #=> [<Animal id: 4, breed: 'Daschund'>, <Animal id: 7, breed: 'Daschund'>]
-      ```
+In your project's Gemfile:
 
-2. Organization
-  - has many animals
-  - has many events
-  - methods:
-    - `find`
-      Find a single organization by primary key (id)
+`gem 'rescue_groups'`
 
-      ```ruby
-        Organization.find(1)
-        #=> <Organization id: 1, name: 'Happy Animals of Chicago'>
-      ```
-    - `where`
-      Search for an organization by specific [fields](docs/organization_field.md)
+In a Rails application, all files will be included by default.
 
-      ```ruby
-        Organization.where(city_name: 'Chicago')
-        #=> [<Organization id: 4, city_name: 'Chicago'>, <Organization id: 7, city_name: 'Chicago'>]
-      ```
-3. Event
-  - belongs to an organization
-  - methods:
-    - `find`
-      Find a single event by primary key (id)
+In other Ruby applications, call `require 'rescue_groups'` where RescueGroups is needed.
 
-      ```ruby
-        Event.find(1)
-        #=> <Event id: 1, name: 'Black cat event'>
-      ```
-    - `where`
-      Search for an event by specific [fields](docs/event_field.md)
+# Configuration
 
-      ```ruby
-        Event.where(event_name: 'Awesome Puppies')
-        #=> [<Event id: 4, event_name: 'Awesome Puppies'>]
-      ```
+An API key is required to use the RescueGroups API. An `ENV` variable named `'RESCUE_GROUPS_API_KEY'` is automatically accessed on initialization.
 
+Otherwise, add the following block to an initializer in your application:
+
+```ruby
+RescueGroups.configuration do |config|
+  config.apikey = 'your api key'
+end
+```
+
+# Querying
+
+Two methods, `find` and `where`, are used to query about three resources: `Animal`, `Organization`, and `Event`.
+
+### `find`
+
+The find method accepts one to multiple ids and returns one or many results, respectively.
+
+**One ID**
+
+```ruby
+Animal.find(1)
+#=> <Animal id: 1, name: 'Fluffy' ...>
+```
+
+**Multiple IDs**
+
+```ruby
+Animal.find([20, 30, 40])
+#=> [<Animal id: 20, name: 'Mittens' ...>, <Animal id: 30, name: 'Mr. Doom' ...>, <Animal id: 40, name: 'CatDog' ...>]
+```
+
+**404 Response**
+
+If the object(s) is not found, an exception is raised `"Unable to find Animal with id: -1"
+
+### `where`
+
+The where method accepts a hash of attributes and finds animals that match all the criteria.
+
+**One attribute**
+
+```ruby
+Organization.where(name: 'Pets-R-Us')
+# => <Organization id: 1, name: 'Pets-R-Us' ...>
+```
+
+**Multiple attributes**
+
+```ruby
+Organization.where(name: 'Big Bobs Pets', city: 'Kansas City')
+# => <Organization id: 42, name: 'Big Bobs Pets', city: 'Kansas City' ...>
+```
