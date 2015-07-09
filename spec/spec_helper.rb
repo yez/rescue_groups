@@ -1,4 +1,9 @@
 require_relative '../config/initializer'
+
+RescueGroups.configuration do |config|
+  config.apikey = 'test_api_key'
+end
+
 require 'pry'
 require 'webmock/rspec'
 require_relative './fixtures/test_constants'
@@ -28,7 +33,7 @@ end
 
 RSpec.configure do |config|
   fixtures_dir = "#{ File.dirname(__FILE__) }/fixtures/"
-  post_url     = 'https://api.rescuegroups.org/http/json?apikey='
+  post_url     = 'https://api.rescuegroups.org/http/json'
   headers      = { 'Content-Type' => 'application/json' }
   SUCCESS      = 200
   NOT_FOUND    = 404
@@ -43,7 +48,7 @@ RSpec.configure do |config|
           objectType: :orgs,
           fields: OrganizationField.all,
           values: [{ orgID: TEST_ORG_ID }],
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
@@ -60,7 +65,7 @@ RSpec.configure do |config|
           objectType: :orgs,
           fields: OrganizationField.all,
           values: [{ orgID: NOT_FOUND_ORG_ID }],
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
@@ -88,7 +93,7 @@ RSpec.configure do |config|
             }],
             fields: OrganizationField.all,
           },
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
@@ -116,7 +121,7 @@ RSpec.configure do |config|
             }],
             fields: OrganizationField.all,
           },
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
@@ -144,7 +149,7 @@ RSpec.configure do |config|
             }],
             fields: AnimalField.all,
           },
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
@@ -172,7 +177,7 @@ RSpec.configure do |config|
             }],
             fields: AnimalField.all,
           },
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
@@ -200,7 +205,7 @@ RSpec.configure do |config|
             }],
             fields: AnimalField.all,
           },
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
@@ -217,7 +222,7 @@ RSpec.configure do |config|
           objectType: :animals,
           fields: AnimalField.all,
           values: [{ animalID: TEST_ANIMAL_ID }],
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
@@ -234,7 +239,7 @@ RSpec.configure do |config|
           objectType: :animals,
           fields: AnimalField.all,
           values: [{ animalID: NOT_FOUND_ANIMAL_ID }],
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
@@ -251,7 +256,7 @@ RSpec.configure do |config|
           objectType: :events,
           fields: EventField.all,
           values: [{ eventID: TEST_EVENT_ID }],
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
@@ -268,7 +273,7 @@ RSpec.configure do |config|
           objectType: :events,
           fields: EventField.all,
           values: [{ eventID: NOT_FOUND_EVENT_ID }],
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
@@ -296,7 +301,7 @@ RSpec.configure do |config|
             }],
             fields: EventField.all,
           },
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
@@ -324,7 +329,7 @@ RSpec.configure do |config|
             }],
             fields: EventField.all,
           },
-          apikey: ''
+          apikey: 'test_api_key'
         }),
         headers: headers)
       .to_return(
