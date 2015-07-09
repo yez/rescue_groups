@@ -2,7 +2,7 @@
 
 Wrapper for RescueGroups.org API
 
-![Build Status](https://travis-ci.org/yez/rescuegroups.svg?branch=master)
+![Build Status](https://travis-ci.org/yez/rescue_groups.svg?branch=master)
 
 # Purpose
 
