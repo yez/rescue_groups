@@ -1,19 +1,19 @@
 module RescueGroups
   class BaseMock
     class << self
-      def single_success
+      def find
         mocked_class.new(test_hash)
       end
 
-      def multiple_success
+      def where
         [single_success]
       end
 
-      def single_error
+      def find_not_found
         fail "Unable to find #{ self.class.name }"
       end
 
-      def multiple_error
+      def where_not_found
         []
       end
     end
