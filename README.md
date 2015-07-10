@@ -73,3 +73,67 @@ Organization.where(name: 'Pets-R-Us')
 Organization.where(name: 'Big Bobs Pets', city: 'Kansas City')
 # => <Organization id: 42, name: 'Big Bobs Pets', city: 'Kansas City' ...>
 ```
+
+# Test Mocks
+
+For testing, each model has a corresponding mock class. Mocked classes are available by default.
+
+### `find`
+
+Returns a single object as if it was from a successful `find` method call.
+
+```ruby
+RescueGroups::AnimalMock.find
+#=> <Animal id: 123, name: 'fluffy' ...>
+```
+
+Use this method while testing in place of writing your own custom factories/stubbed versions of RescueGroups objects.
+
+```ruby
+describe SomeTestClass do
+  let(:animal) { RescueGroups::AnimalMock.find }
+
+  specify do
+    # test method body
+  end
+end
+```
+
+### `find_not_found`
+
+To emulate an error during a find call for testing, the `find_not_found` method will raise the same error as a typical `find` method.
+
+```ruby
+RescueGroups::AnimalMock.find_not_found
+# => Unable to find Animal
+```
+
+### `where`
+
+Returns an array containing a single object as if it was from a successful `where` method call.
+
+```ruby
+RescueGroups::AnimalMock.where
+#=> [<Animal id: 123, name: 'fluffy' ...>]
+```
+
+Use this method while testing in place of writing your own custom factories/stubbed versions of RescueGroups objects.
+
+```ruby
+describe SomeTestClass do
+  let(:animal_response) { RescueGroups::AnimalMock.where }
+
+  specify do
+    # test method body
+  end
+end
+```
+
+### `where_not_found`
+
+The `where_not_found` method emulates a `where` method that returns no results, and returns an empty array.
+
+```ruby
+RescueGroups::Animal.where_not_found
+#=> []
+```
