@@ -4,10 +4,22 @@ require_relative './base_mock'
 module RescueGroups
   class AnimalMock < BaseMock
     class << self
+      # method: mocked_class
+      # purpose: Used by BaseMock, defines which object
+      #            within the RescueGroups namespace to
+      #            initialize with test_hash
+      # param: none
+      # return: <Constant> Name of the class to initialize with
       def mocked_class
         Animal
       end
 
+      # method: test_hash
+      # purpose: Define attributes relevant to a test version
+      #            of this object.
+      # param: none
+      # return: <Hash> hash of values that would constitute
+      #           a decent set of attributes for this class
       def test_hash
         {
           "animalID"=>"1001923",
