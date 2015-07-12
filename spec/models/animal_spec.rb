@@ -46,13 +46,7 @@ module RescueGroups
         it 'adds conditions to search' do
           expect_any_instance_of(AnimalSearch)
             .to receive(:add_filter)
-            .with(:animalBreed, :equal, TEST_ANIMAL_BREED)
-
-          allow_any_instance_of(RemoteClient)
-            .to receive_message_chain(:post_and_respond, :success?) {true }
-
-          allow_any_instance_of(RemoteClient)
-            .to receive_message_chain(:post_and_respond, :[]) { [] }
+            .with(:animalBreed, :equal, TEST_ANIMAL_BREED).and_call_original
 
           described_class.where(conditions)
         end

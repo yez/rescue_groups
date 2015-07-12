@@ -46,7 +46,7 @@ RSpec.configure do |config|
         body: JSON({
           objectAction: :publicView,
           objectType: :orgs,
-          fields: OrganizationField.all,
+          fields: RescueGroups::OrganizationField.all,
           values: [{ orgID: TEST_ORG_ID }],
           apikey: 'test_api_key'
         }),
@@ -63,7 +63,7 @@ RSpec.configure do |config|
         body: JSON({
           objectAction: :publicView,
           objectType: :orgs,
-          fields: OrganizationField.all,
+          fields: RescueGroups::OrganizationField.all,
           values: [{ orgID: NOT_FOUND_ORG_ID }],
           apikey: 'test_api_key'
         }),
@@ -82,7 +82,7 @@ RSpec.configure do |config|
           objectType: :orgs,
           search: {
             resultStart: 0,
-            resultLimit: 10,
+            resultLimit: 100,
             resultSort: nil,
             resultOrder: :asc,
             calcFoundRows: 'Yes',
@@ -91,7 +91,7 @@ RSpec.configure do |config|
               operation: :equal,
               criteria: TEST_ORG_NAME
             }],
-            fields: OrganizationField.all,
+            fields: RescueGroups::OrganizationField.all,
           },
           apikey: 'test_api_key'
         }),
@@ -110,7 +110,7 @@ RSpec.configure do |config|
           objectType: :orgs,
           search: {
             resultStart: 0,
-            resultLimit: 10,
+            resultLimit: 100,
             resultSort: nil,
             resultOrder: :asc,
             calcFoundRows: 'Yes',
@@ -119,7 +119,7 @@ RSpec.configure do |config|
               operation: :equal,
               criteria: NOT_FOUND_ORG_NAME
             }],
-            fields: OrganizationField.all,
+            fields: RescueGroups::OrganizationField.all,
           },
           apikey: 'test_api_key'
         }),
@@ -138,7 +138,7 @@ RSpec.configure do |config|
           objectType: :animals,
           search: {
             resultStart: 0,
-            resultLimit: 10,
+            resultLimit: 100,
             resultSort: nil,
             resultOrder: :asc,
             calcFoundRows: 'Yes',
@@ -147,7 +147,7 @@ RSpec.configure do |config|
               operation: :equal,
               criteria: TEST_ANIMAL_BREED
             }],
-            fields: AnimalField.all,
+            fields: RescueGroups::AnimalField.all,
           },
           apikey: 'test_api_key'
         }),
@@ -166,7 +166,7 @@ RSpec.configure do |config|
           objectType: :animals,
           search: {
             resultStart: 0,
-            resultLimit: 10,
+            resultLimit: 100,
             resultSort: nil,
             resultOrder: :asc,
             calcFoundRows: 'Yes',
@@ -175,7 +175,7 @@ RSpec.configure do |config|
               operation: :equal,
               criteria: TEST_ORG_ID
             }],
-            fields: AnimalField.all,
+            fields: RescueGroups::AnimalField.all,
           },
           apikey: 'test_api_key'
         }),
@@ -194,7 +194,7 @@ RSpec.configure do |config|
           objectType: :animals,
           search: {
             resultStart: 0,
-            resultLimit: 10,
+            resultLimit: 100,
             resultSort: nil,
             resultOrder: :asc,
             calcFoundRows: 'Yes',
@@ -203,7 +203,7 @@ RSpec.configure do |config|
               operation: :equal,
               criteria: NOT_FOUND_ANIMAL_BREED
             }],
-            fields: AnimalField.all,
+            fields: RescueGroups::AnimalField.all,
           },
           apikey: 'test_api_key'
         }),
@@ -220,7 +220,7 @@ RSpec.configure do |config|
         body: JSON({
           objectAction: :publicView,
           objectType: :animals,
-          fields: AnimalField.all,
+          fields: RescueGroups::AnimalField.all,
           values: [{ animalID: TEST_ANIMAL_ID }],
           apikey: 'test_api_key'
         }),
@@ -237,7 +237,7 @@ RSpec.configure do |config|
         body: JSON({
           objectAction: :publicView,
           objectType: :animals,
-          fields: AnimalField.all,
+          fields: RescueGroups::AnimalField.all,
           values: [{ animalID: NOT_FOUND_ANIMAL_ID }],
           apikey: 'test_api_key'
         }),
@@ -254,7 +254,7 @@ RSpec.configure do |config|
         body: JSON({
           objectAction: :publicView,
           objectType: :events,
-          fields: EventField.all,
+          fields: RescueGroups::EventField.all,
           values: [{ eventID: TEST_EVENT_ID }],
           apikey: 'test_api_key'
         }),
@@ -271,7 +271,7 @@ RSpec.configure do |config|
         body: JSON({
           objectAction: :publicView,
           objectType: :events,
-          fields: EventField.all,
+          fields: RescueGroups::EventField.all,
           values: [{ eventID: NOT_FOUND_EVENT_ID }],
           apikey: 'test_api_key'
         }),
@@ -290,7 +290,7 @@ RSpec.configure do |config|
           objectType: :events,
           search: {
             resultStart: 0,
-            resultLimit: 10,
+            resultLimit: 100,
             resultSort: nil,
             resultOrder: :asc,
             calcFoundRows: 'Yes',
@@ -299,7 +299,7 @@ RSpec.configure do |config|
               operation: :equal,
               criteria: TEST_EVENT_NAME
             }],
-            fields: EventField.all,
+            fields: RescueGroups::EventField.all,
           },
           apikey: 'test_api_key'
         }),
@@ -318,7 +318,7 @@ RSpec.configure do |config|
           objectType: :events,
           search: {
             resultStart: 0,
-            resultLimit: 10,
+            resultLimit: 100,
             resultSort: nil,
             resultOrder: :asc,
             calcFoundRows: 'Yes',
@@ -327,7 +327,7 @@ RSpec.configure do |config|
               operation: :equal,
               criteria: NOT_FOUND_EVENT_NAME
             }],
-            fields: EventField.all,
+            fields: RescueGroups::EventField.all,
           },
           apikey: 'test_api_key'
         }),

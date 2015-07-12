@@ -4,6 +4,9 @@ require_relative '../../lib/queryable'
 class TestClass
   FIELDS = { some_test_field: 'SomeTestField' }
   include RescueGroups::Queryable
+
+  def initialize(anything)
+  end
 end
 
 module RescueGroups
@@ -79,16 +82,15 @@ module RescueGroups
 
     describe '.where' do
       before do
-        obj = Object.new
-        allow(obj).to receive(:as_json) { {} }
-        allow(TestClass).to receive_message_chain(:search_engine_class, :new) { obj }
+        allow(BaseSearch).to receive(:fields) { [] }
+        allow(TestClass).to receive_message_chain(:search_engine_class, :new) { BaseSearch.new }
       end
 
       context 'automatic offsets' do
         context 'returned data row count is larger than the limit' do
           let(:response) do
             TestResponse.new(200,
-              { 'status' => 'ok', 'found_rows' => 3000, 'data' => {}})
+              { 'status' => 'ok', 'found_rows' => 3000, 'data' => { anything => [anything]}})
           end
 
           before do
@@ -100,7 +102,7 @@ module RescueGroups
 
           it 'makes additonal requests with an offset until the row count is met' do
             expect(TestClass.api_client).to receive(:post_and_respond)
-                                        .exactly(3).times
+                                        .exactly(31).times
             TestClass.where(anything: anything)
           end
         end

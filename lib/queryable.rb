@@ -51,9 +51,11 @@ module RescueGroups
 
         fail("Problem with request #{ response.error }") unless response.success?
 
+        return [] if response['data'].nil? || response['data'].empty?
+
         results_count = response['data'].keys.length
 
-        if results_count < response['found_rows']
+        if response['found_rows'] && results_count < response['found_rows']
           (response['found_rows'] / search_engine.limit).times.each do |i|
             search_engine.start = search_engine.limit * (i + 1)
             additional_results_response = api_client.post_and_respond(where_body(search_engine))
