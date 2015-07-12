@@ -51,6 +51,17 @@ module RescueGroups
 
         fail("Problem with request #{ response.error }") unless response.success?
 
+        results_count = response['data'].keys.length
+
+        if results_count < response['found_rows']
+          (response['found_rows'] / search_engine.limit).times.each do |i|
+            search_engine.start = search_engine.limit * (i + 1)
+            additional_results_response = api_client.post_and_respond(where_body(search_engine))
+            fail("Problem with request #{ additional_results_response.error }") unless additional_results_response.success?
+            response['data'].merge(additional_results_response['data'])
+          end
+        end
+
         response['data'].map do |_data_id, data|
           new(data)
         end

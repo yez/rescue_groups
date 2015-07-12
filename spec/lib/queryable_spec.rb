@@ -82,47 +82,74 @@ module RescueGroups
         obj = Object.new
         allow(obj).to receive(:as_json) { {} }
         allow(TestClass).to receive_message_chain(:search_engine_class, :new) { obj }
-        allow(TestClass)
-          .to receive_message_chain(:api_client, :post_and_respond) { response }
       end
 
-      context 'response is successful' do
-        context 'data is returned' do
+      context 'automatic offsets' do
+        context 'returned data row count is larger than the limit' do
           let(:response) do
             TestResponse.new(200,
-              { 'status' => 'ok', 'data' => { id: anything, another_id: anything } })
+              { 'status' => 'ok', 'found_rows' => 3000, 'data' => {}})
           end
 
-          it 'returns the data as an array' do
-            expect(TestClass).to receive(:new).twice
-            response = TestClass.where(anything: anything)
-            expect(response).to be_a(Array)
-          end
-        end
-
-        context 'no data is returned' do
-          let(:response) do
-            TestResponse.new(200,
-              { 'status' => 'ok', 'data' => { } })
+          before do
+            api_client = Object.new
+            allow(api_client).to receive(:post_and_respond) { response}
+            allow(TestClass).to receive(:api_client) { api_client }
+            allow(response).to receive(:success?) { true }
           end
 
-          it 'returns an empty array' do
-            response = TestClass.where(anything: anything)
-            expect(response).to eq([])
-          end
-        end
-      end
-
-      context 'response is not successful' do
-        let(:response) do
-          TestResponse.new(200,
-            { 'status' => 'error', 'data' => nil })
-        end
-
-        it 'raises error' do
-          expect do
+          it 'makes additonal requests with an offset until the row count is met' do
+            expect(TestClass.api_client).to receive(:post_and_respond)
+                                        .exactly(3).times
             TestClass.where(anything: anything)
-          end.to raise_error(/Problem with request/)
+          end
+        end
+      end
+
+      context 'basic behaviour' do
+        before do
+          allow(TestClass)
+            .to receive_message_chain(:api_client, :post_and_respond) { response }
+        end
+
+        context 'response is successful' do
+          context 'data is returned' do
+            let(:response) do
+              TestResponse.new(200,
+                { 'status' => 'ok', 'data' => { id: anything, another_id: anything } })
+            end
+
+            it 'returns the data as an array' do
+              expect(TestClass).to receive(:new).twice
+              response = TestClass.where(anything: anything)
+              expect(response).to be_a(Array)
+            end
+          end
+
+          context 'no data is returned' do
+            let(:response) do
+              TestResponse.new(200,
+                { 'status' => 'ok', 'data' => { } })
+            end
+
+            it 'returns an empty array' do
+              response = TestClass.where(anything: anything)
+              expect(response).to eq([])
+            end
+          end
+        end
+
+        context 'response is not successful' do
+          let(:response) do
+            TestResponse.new(200,
+              { 'status' => 'error', 'data' => nil })
+          end
+
+          it 'raises error' do
+            expect do
+              TestClass.where(anything: anything)
+            end.to raise_error(/Problem with request/)
+          end
         end
       end
     end
