@@ -1,13 +1,15 @@
 require_relative './base_search'
 require_relative './animal_field'
 
-class AnimalSearch < BaseSearch
-  # method: fields
-  # purpose: Return the the list of fields to request for this class for
-  #            the remote call to RescueGroups
-  # param: none
-  # return: <Array[Symbol]> - All field names pertinent to this class
-  def self.fields
-    AnimalField.all
+module RescueGroups
+  class AnimalSearch < BaseSearch
+    # method: fields
+    # purpose: Return the the list of fields to request for this class for
+    #            the remote call to RescueGroups
+    # param: none
+    # return: <Array[Symbol]> - All field names pertinent to this class
+    def self.fields
+      AnimalField.all
+    end
   end
 end
