@@ -55,9 +55,7 @@ module RescueGroups
 
         results_count = response['data'].keys.length
 
-        unless hit_request_limit?(response)
-          response['data'].merge(additional_request_data(response, search_engine))
-        end
+        response['data'].merge(additional_request_data(response, search_engine))
 
         response['data'].map do |_data_id, data|
           new(data)
@@ -86,6 +84,8 @@ module RescueGroups
       private
 
       def additional_request_data(response, search_engine)
+        return {} if hit_request_limit?(response)
+
         {}.tap do |data|
           (response['found_rows'] / search_engine.limit).times.each do |i|
             search_engine.start = search_engine.limit * (i + 1)
