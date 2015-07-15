@@ -58,7 +58,7 @@ If the object(s) is not found, an exception is raised `"Unable to find Animal wi
 
 ### `where`
 
-The where method accepts a hash of attributes and finds animals that match all the criteria.
+The where method accepts a hash of attributes and finds animals that match all the criteria. If the returned list of objects is less than the count found by the server, additional requests are automatically made with the same search criteria until all results returned.
 
 **One attribute**
 
