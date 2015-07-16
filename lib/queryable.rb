@@ -72,7 +72,7 @@ module RescueGroups
 
       # method: conditions_to_search_engine
       # purpose: Given a list of unmapped filters, call helper method
-      #            conditions_to_filters and add the result to the search
+      #            key_to_rescue_groups_key and add the result to the search
       #            new search engine that is returned
       # param: conditions <Hash> - conditions to conduct the search on
       # return: <Object> -  instantiated search engine
@@ -80,7 +80,7 @@ module RescueGroups
       def conditions_to_search_engine(conditions)
         search_engine = search_engine_class.new
 
-        conditions_to_filters(conditions) do |mapped_key, val|
+        key_to_rescue_groups_key(conditions) do |mapped_key, val|
           search_engine.add_filter(mapped_key, :equal, val)
         end
 
@@ -136,14 +136,14 @@ module RescueGroups
         response['found_rows'].nil? || response['data'].keys.length >= response['found_rows']
       end
 
-      # method: conditions_to_filters
+      # method: key_to_rescue_groups_key
       # purpose: map conditional arguments given to
       #          their corresponding filters
-      # example: conditions_to_filters(eye_color: 'brown')
+      # example: key_to_rescue_groups_key(eye_color: 'brown')
       #          #=> Filter.new(name: 'animalEyeColor', operation: 'equal', criteria: 'brown')
       # params: conditions - <Hash> - conditions passed from .where
       #         block - <Block> - evaluated block with the mapped key and value
-      def conditions_to_filters(conditions, &block)
+      def key_to_rescue_groups_key(conditions, &block)
         fail('Block not given') unless block_given?
         conditions.each do |key, value|
           mapped_key = object_fields::FIELDS[key.to_sym]
