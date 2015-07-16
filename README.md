@@ -60,18 +60,27 @@ If the object(s) is not found, an exception is raised `"Unable to find Animal wi
 
 The where method accepts a hash of attributes and finds animals that match all the criteria. If the returned list of objects is less than the count found by the server, additional requests are automatically made with the same search criteria until all results returned.
 
+A full set of fields are defined for [Animals](docs/animal_field.md), [Organizations](docs/organization_field.md), and [Events](docs/event_field.md)
+
 **One attribute**
 
 ```ruby
 Organization.where(name: 'Pets-R-Us')
-# => <Organization id: 1, name: 'Pets-R-Us' ...>
+# => [<Organization id: 1, name: 'Pets-R-Us' ...>]
 ```
 
 **Multiple attributes**
 
 ```ruby
 Organization.where(name: 'Big Bobs Pets', city: 'Kansas City')
-# => <Organization id: 42, name: 'Big Bobs Pets', city: 'Kansas City' ...>
+# => [<Organization id: 42, name: 'Big Bobs Pets', city: 'Kansas City' ...>]
+```
+
+**No results**
+
+```ruby
+Organization.where(name: 'Bad Dogs R Us')
+# => []
 ```
 
 # Test Mocks

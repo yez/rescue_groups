@@ -8,7 +8,6 @@ RescueGroups.configuration do |config|
   config.apikey = ENV['RESCUE_GROUPS_API_KEY'] || ''
 end
 
-require_relative '../lib/remote_client'
 require_relative '../models/animal'
 require_relative '../models/organization'
 require_relative '../models/event'
