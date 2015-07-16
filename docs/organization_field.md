@@ -1,4 +1,4 @@
-## Organization Field
+## Organization Fields
 * id
 * about
 * adoption_process
