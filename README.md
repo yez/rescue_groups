@@ -60,7 +60,7 @@ If the object(s) is not found, an exception is raised `"Unable to find Animal wi
 
 The where method accepts a hash of attributes and finds animals that match all the criteria. If the returned list of objects is less than the count found by the server, additional requests are automatically made with the same search criteria until all results returned.
 
-A full set of fields are defined for [Animals](docs/animal_field.md), [Organizations](docs/organization_field.md), and [Events](docs/event_field.md)
+A full set of fields are defined for [`Animals`](docs/animal_field.md), [`Organizations`](docs/organization_field.md), and [`Events`](docs/event_field.md)
 
 **One attribute**
 
@@ -81,6 +81,20 @@ Organization.where(name: 'Big Bobs Pets', city: 'Kansas City')
 ```ruby
 Organization.where(name: 'Bad Dogs R Us')
 # => []
+```
+# Relationships
+
+`Animals`, `Organizations`, and `Events` have relationships to one another. `Animals` have a single associated `Organization`, as do `Events`. `Organizations` have 1 or many `Events` and `Animals`.
+
+Calling a relationship that does not exist in memory will automatically fetch the associated object.
+
+```ruby
+organization = Organization.find(1)
+# => <Organization id: 1, name: 'Pets', city: 'Dallas' ...>
+
+# This will issue a remote call that is equivalent to Animal.where(organization_id: 1)
+organization.animals
+# => [<Animal id: 1, organization_id: 1 ...>, <Animal id: 2, organization_id: 1 ...>, ...]
 ```
 
 # Test Mocks
