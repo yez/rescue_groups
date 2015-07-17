@@ -2,12 +2,19 @@ module RescueGroups
   class Filter
     attr_accessor :name, :operation, :criteria
 
-    OPERATIONS = %i[equal notequal
-                    lessthan lessthanorequal
-                    greaterthan greaterthanorequal
-                    contains notcontain
-                    blank notblank
-                    radius].freeze
+    OPERATIONS = {
+      equal: :equal,
+      not_equal: :notequal,
+      less_than: :lessthan,
+      less_than_or_equal: :lessthanorequal,
+      greater_than: :greaterthan,
+      greater_than_or_equal: :greaterthanorequal,
+      contains: :contains,
+      not_contain: :notcontain,
+      blank: :blank,
+      not_blank: :notblank,
+      radius: :radius
+    }
 
     # method: initialize
     # purpose: Set important instance variables for a new Filter
@@ -20,7 +27,7 @@ module RescueGroups
     # return: none
     def initialize(name, operation, criteria)
       @name      = name
-      @operation = OPERATIONS.find { |o| o == operation.to_sym } if operation
+      @operation = OPERATIONS[operation] or fail 'Invalid operation given'
       @criteria  = criteria
     end
 

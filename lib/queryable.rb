@@ -79,9 +79,15 @@ module RescueGroups
       #           with filters added
       def conditions_to_search_engine(conditions)
         search_engine = search_engine_class.new
+        equality_operator = :equal
 
         key_to_rescue_groups_key(conditions) do |mapped_key, val|
-          search_engine.add_filter(mapped_key, :equal, val)
+          if val.is_a?(Hash)
+            equality_operator = val.keys[0]
+            val = val.values[0]
+          end
+
+          search_engine.add_filter(mapped_key, equality_operator, val)
         end
 
         search_engine
@@ -149,8 +155,12 @@ module RescueGroups
           mapped_key = object_fields::FIELDS[key.to_sym]
           next if mapped_key.nil?
 
-          [*value].flatten.each do |val|
-            yield mapped_key, val
+          if value.is_a?(Hash)
+            yield mapped_key, value
+          else
+            [*value].flatten.each do |val|
+              yield mapped_key, val
+            end
           end
         end
       end

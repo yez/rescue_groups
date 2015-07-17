@@ -154,6 +154,26 @@ module RescueGroups
           end
         end
       end
+
+      context 'querying with something besides equals to' do
+        let(:response) do
+          TestResponse.new(200,
+            { 'status' => 'ok', 'data' => { id: anything, another_id: anything } })
+        end
+        let(:equality_filter) { { less_than: 1 } }
+
+        before do
+          allow(TestClass)
+            .to receive_message_chain(:api_client, :post_and_respond) { response }
+          allow(TestClass)
+            .to receive(:where_body) { {} }
+        end
+
+        it 'makes a filter with the mapped equality method' do
+          expect(Filter).to receive(:new).with("SomeTestField", :less_than, 1)
+          TestClass.where(some_test_field: equality_filter)
+        end
+      end
     end
 
     describe '!.key_to_rescue_groups_key' do

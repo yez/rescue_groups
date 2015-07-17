@@ -4,7 +4,7 @@ module RescueGroups
   describe Filter do
     subject { described_class.new(name, operation, criteria) }
     let(:name)      { 'some attribute' }
-    let(:operation) { 'equal' }
+    let(:operation) { described_class::OPERATIONS.keys.sample }
     let(:criteria)  { 'the correct thing' }
 
     describe '#initialize' do
@@ -19,9 +19,10 @@ module RescueGroups
 
       context 'with an uknown operation' do
         let(:operation) { :banana }
-        it 'sets the operation to nil' do
-          expect(subject.instance_variables).to include(:@operation)
-          expect(subject.operation).to be_nil
+        it 'raises an exception about an unknown operator' do
+          expect do
+            subject
+          end.to raise_error
         end
       end
     end
