@@ -35,7 +35,7 @@ module RescueGroups
       kill_date:                 :animalKillDate,
       kill_reason:               :animalKillReason,
       location:                  :animalLocation,
-      location_distance:         :animalLocationDistance,
+      # location_distance:         :animalLocationDistance,
       location_city_state:       :animalLocationCitystate,
       microchipped:              :animalMicrochipped,
       mixed_breed:               :animalMixedBreed,

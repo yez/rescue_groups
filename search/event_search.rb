@@ -9,7 +9,7 @@ module RescueGroups
     # param: none
     # return: <Array[Symbol]> - All field names pertinent to this class
     def self.fields
-      EventField.all
+      EventField::FIELDS
     end
   end
 end

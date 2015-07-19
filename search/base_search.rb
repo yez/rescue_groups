@@ -27,7 +27,7 @@ module RescueGroups
       @sort            = sort
       @order           = order
       @calc_found_rows = 'Yes'
-      @fields          = self.class.fields
+      @fields          = self.class.fields.values
       @filters         = []
     end
 
@@ -51,13 +51,13 @@ module RescueGroups
     # return: <Hash> - keyed values of local variables
     def as_json
       {
-        resultStart:   start,
-        resultLimit:   limit,
-        resultSort:    sort,
-        resultOrder:   order,
-        calcFoundRows: calc_found_rows,
-        filters:       filters.map(&:as_json),
-        fields:        fields
+        resultStart:   @start,
+        resultLimit:   @limit,
+        resultSort:    @sort,
+        resultOrder:   @order,
+        calcFoundRows: @calc_found_rows,
+        filters:       @filters.map(&:as_json),
+        fields:        @fields,
       }
     end
 

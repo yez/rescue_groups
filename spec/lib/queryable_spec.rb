@@ -7,6 +7,10 @@ class TestClass
 
   def initialize(anything)
   end
+
+  def self.fields
+    FIELDS
+  end
 end
 
 module RescueGroups
@@ -82,7 +86,7 @@ module RescueGroups
 
     describe '.where' do
       before do
-        allow(BaseSearch).to receive(:fields) { [] }
+        allow(BaseSearch).to receive(:fields) { {} }
         allow(TestClass).to receive_message_chain(:search_engine_class, :new) { BaseSearch.new }
       end
 
