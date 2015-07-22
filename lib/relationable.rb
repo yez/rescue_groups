@@ -33,7 +33,7 @@ module RescueGroups
           relationship_id = self.send(:"#{ relationship }_id")
 
           unless relationship_id.nil?
-            klass = self.class.send(:constantize, relationship)
+            klass = RescueGroups.constantize(relationship)
 
             self.send(:"#{ relationship }=", klass.find(relationship_id))
           end
@@ -73,39 +73,13 @@ module RescueGroups
 
           return temp unless temp.nil? || temp.empty?
 
-          klass = self.class.send(:constantize, relationship)
+          klass = RescueGroups.constantize(relationship)
           foreign_key = "#{ self.class.to_s.split('::').last.downcase }_id"
           klass.where(foreign_key.to_sym => @id)
         end
 
         define_method :"#{ relationship }=" do |value|
           instance_variable_set(:"@#{ relationship }", value)
-        end
-      end
-
-      private
-
-      # method: constantize
-      # purpose: given a symbol, convert it into a class name and
-      #            return the matching constant
-      # param: relationship - <symbol> - name of the constant
-      # return: constant that is defined or it raises an error
-      def constantize(relationship)
-        klass = ''
-
-        relationship.to_s.split('_').each do |piece|
-          klass += "#{ (piece[0].ord - 32).to_i.chr }#{ piece[1..-1] }"
-        end
-
-        begin
-          Object.const_get("RescueGroups::#{ klass }")
-        rescue NameError => e
-          # remove trailing s or es in case of has_many :animals
-          if klass[-2..-1] == 'es'
-            Object.const_get("RescueGroups::#{ klass[0..-3] }")
-          else
-            Object.const_get("RescueGroups::#{ klass[0..-2] }")
-          end
         end
       end
     end
