@@ -30,9 +30,9 @@ RescueGroups.configuration do |config|
 end
 ```
 
-# Querying
+# Searching
 
-Two methods, `find` and `where`, are used to query about three resources: `Animal`, `Organization`, and `Event`.
+Two methods, `find` and `where`, are used to search three resources: `Animal`, `Organization`, and `Event`.
 
 ### `find`
 
@@ -69,11 +69,43 @@ Organization.where(name: 'Pets-R-Us')
 # => [<Organization id: 1, name: 'Pets-R-Us' ...>]
 ```
 
+To search multiple values on the same attribute, use an array:
+
+```ruby
+Animal.where(color: ['black', 'brown'])
+# => [<Animal id: 1, color: 'black' ..>, <Animal id: 5, color: 'brown' ..>]
+```
+
 **Multiple attributes**
 
 ```ruby
 Organization.where(name: 'Big Bobs Pets', city: 'Kansas City')
 # => [<Organization id: 42, name: 'Big Bobs Pets', city: 'Kansas City' ...>]
+```
+
+**Complex attributes**
+
+For more sophisticated searches, the following attributes are provided:
+
+* equal
+* not_equal
+* less_than
+* less_than_or_equal
+* greater_than
+* greater_than_or_equal
+* contains
+* not_contain
+* blank
+* not_blank
+
+These attributes may be used in addition to others in a single `where` call or alone
+
+```ruby
+Animal.where(general_age: { less_than: 5})
+# => [<Animal id: 1, age: 2 ..>, <Animal id: 3, age: 1 ..>]
+
+Organization.where(name: { contains: 'shelter'}, location: 90210)
+# => [<Organization id: 1, name: 'Big Animal Shelter', location: 90210 ...>, <Organization id: 2, name: 'Small Animal Shelter', location: 90210 ...>,]
 ```
 
 **No results**
