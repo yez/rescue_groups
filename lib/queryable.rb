@@ -97,7 +97,6 @@ module RescueGroups
       def search_engine(configuration)
         args = {
           limit: configuration[:limit],
-          offset: configuration[:offset],
           start: configuration[:start],
           sort: configuration[:sort],
         }.reject { |_, v| v.nil? }

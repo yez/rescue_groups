@@ -189,20 +189,56 @@ module RescueGroups
         end
       end
 
-      context 'limiting result set' do
-        let(:response) do
-          TestResponse.new(200,
-            { 'status' => 'ok', 'data' => { id: anything, another_id: anything } })
+      describe 'result set modifiers' do
+        context 'limit' do
+          let(:response) do
+            TestResponse.new(200,
+              { 'status' => 'ok', 'data' => { id: anything, another_id: anything } })
+          end
+
+          before do
+            allow(TestClass)
+              .to receive_message_chain(:api_client, :post_and_respond) { response }
+          end
+
+          it 'passes the limit to the search engine' do
+            expect(TestSearch).to receive(:new).with(limit: 10).and_call_original
+            TestClass.where(anything: anything, limit: 10)
+          end
         end
 
-        before do
-          allow(TestClass)
-            .to receive_message_chain(:api_client, :post_and_respond) { response }
+        context 'start' do
+          let(:response) do
+            TestResponse.new(200,
+              { 'status' => 'ok', 'data' => { id: anything, another_id: anything } })
+          end
+
+          before do
+            allow(TestClass)
+              .to receive_message_chain(:api_client, :post_and_respond) { response }
+          end
+
+          it 'passes the limit to the search engine' do
+            expect(TestSearch).to receive(:new).with(start: 10).and_call_original
+            TestClass.where(anything: anything, start: 10)
+          end
         end
 
-        it 'passes the limit to the search engine' do
-          expect(TestSearch).to receive(:new).with(limit: 10).and_call_original
-          TestClass.where(anything: anything, limit: 10)
+        context 'sort' do
+          let(:response) do
+            TestResponse.new(200,
+              { 'status' => 'ok', 'data' => { id: anything, another_id: anything } })
+          end
+
+          before do
+            allow(TestClass)
+              .to receive_message_chain(:api_client, :post_and_respond) { response }
+          end
+
+          it 'passes the limit to the search engine' do
+            expect(TestSearch).to receive(:new).with(sort: :breed).and_call_original
+            TestClass.where(anything: anything, sort: :breed)
+          end
         end
       end
     end
