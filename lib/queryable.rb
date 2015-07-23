@@ -78,11 +78,7 @@ module RescueGroups
       # return: <Object> -  instantiated search engine
       #           with filters added
       def conditions_to_search_engine(conditions)
-        search_engine = if conditions.key?(:limit)
-          search_engine_class.new(limit: conditions[:limit])
-        else
-          search_engine_class.new
-        end
+        search_engine = search_engine(conditions)
 
         key_to_rescue_groups_key(conditions) do |mapped_key, val|
           equality_operator = :equal
@@ -96,6 +92,17 @@ module RescueGroups
         end
 
         search_engine
+      end
+
+      def search_engine(configuration)
+        args = {
+          limit: configuration[:limit],
+          offset: configuration[:offset],
+          start: configuration[:start],
+          sort: configuration[:sort],
+        }.reject { |_, v| v.nil? }
+
+        search_engine_class.new(**args)
       end
 
       # method: where_body
