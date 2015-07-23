@@ -8,8 +8,24 @@ class TestClass
   def initialize(anything)
   end
 
+  def self.search_engine_class
+    TestSearch
+  end
+
+  def self.object_type;end
+
+  def self.object_fields
+    TestClass
+  end
+
   def self.fields
     FIELDS
+  end
+end
+
+class TestSearch < RescueGroups::BaseSearch
+  def self.fields
+    {}
   end
 end
 
@@ -18,7 +34,6 @@ module RescueGroups
     subject { TestClass.new }
 
     before do
-      allow(TestClass).to receive(:object_type)
       allow(TestClass).to receive(:object_fields) { TestClass }
       allow(TestClass).to receive_message_chain(:object_fields, :all)
     end
@@ -86,11 +101,6 @@ module RescueGroups
 
     describe '.where' do
       context 'automatic offsets' do
-        before do
-          allow(BaseSearch).to receive(:fields) { {} }
-          allow(TestClass).to receive_message_chain(:search_engine_class, :new) { BaseSearch.new }
-        end
-
         context 'returned data row count is larger than the limit' do
           let(:response) do
             TestResponse.new(200,
@@ -114,8 +124,6 @@ module RescueGroups
 
       context 'basic behaviour' do
         before do
-          allow(BaseSearch).to receive(:fields) { {} }
-          allow(TestClass).to receive_message_chain(:search_engine_class, :new) { BaseSearch.new }
           allow(TestClass)
             .to receive_message_chain(:api_client, :post_and_respond) { response }
         end
@@ -169,8 +177,6 @@ module RescueGroups
         let(:equality_filter) { { less_than: 1 } }
 
         before do
-          allow(BaseSearch).to receive(:fields) { {} }
-          allow(TestClass).to receive_message_chain(:search_engine_class, :new) { BaseSearch.new }
           allow(TestClass)
             .to receive_message_chain(:api_client, :post_and_respond) { response }
           allow(TestClass)
@@ -190,14 +196,12 @@ module RescueGroups
         end
 
         before do
-          allow(BaseSearch).to receive(:fields) { {} }
-          allow(TestClass).to receive(:search_engine_class) { BaseSearch }
           allow(TestClass)
             .to receive_message_chain(:api_client, :post_and_respond) { response }
         end
 
         it 'passes the limit to the search engine' do
-          expect(BaseSearch).to receive(:new).with(limit: 10).and_call_original
+          expect(TestSearch).to receive(:new).with(limit: 10).and_call_original
           TestClass.where(anything: anything, limit: 10)
         end
       end
