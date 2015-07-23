@@ -21,7 +21,7 @@ module RescueGroups
     #         sort <Symbol>   - Field to sort the results over
     #         order <Symbol>  - Results returned in ascending or descending order
     # return:
-    def initialize(start = 0, limit = 100, sort = nil, order = :asc)
+    def initialize(start: 0, limit: 100, sort: nil, order: :asc)
       @start           = start
       @limit           = limit
       @sort            = sort
