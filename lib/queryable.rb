@@ -1,3 +1,5 @@
+require_relative './requests/find'
+
 module RescueGroups
   module Queryable
     # This method is called when the Queryable Module is included
@@ -14,8 +16,9 @@ module RescueGroups
       # return: One found object if one id was given, otherwise an array of found objects
       #         If the response was not successful, an exception is thrown
       def find(ids)
-        ids_array = [*ids].flatten
-        response = api_client.post_and_respond(find_body(ids_array))
+        find_request = Requests::Find.new(ids, self, api_client)
+
+        response = find_request.request
 
         unless response.success? && !response['data'].nil? && !response['data'].empty?
           fail "Unable to find #{ self.name } with id: #{ ids }"
@@ -23,7 +26,7 @@ module RescueGroups
 
         objects = response['data'].map { |data| new(data) }
 
-        ids_array.length == 1 ? objects.first : objects
+        [*ids].flatten.length == 1 ? objects.first : objects
       end
 
       # method: where

@@ -59,7 +59,7 @@ module RescueGroups
 
           it 'calls new with the data' do
             expect(TestClass).to receive(:new).with(data.first)
-            response = TestClass.find(anything)
+            response = TestClass.find(1)
             expect(response).to_not be_a(Array)
           end
 
@@ -68,7 +68,7 @@ module RescueGroups
 
             it 'returns an array of objects' do
               expect(TestClass).to receive(:new).twice
-              response = TestClass.find([anything, anything])
+              response = TestClass.find([2, 4])
               expect(response).to be_a(Array)
               expect(response.length).to eq(2)
             end
@@ -79,7 +79,7 @@ module RescueGroups
           let(:data) { nil }
           it 'raises an exception' do
             expect do
-              TestClass.find(anything)
+              TestClass.find(-1)
             end.to raise_error(/Unable to find/)
           end
         end
@@ -93,7 +93,7 @@ module RescueGroups
 
         it 'raises an exception' do
           expect do
-            TestClass.find(anything)
+            TestClass.find(20)
           end.to raise_error(/Unable to find/)
         end
       end
