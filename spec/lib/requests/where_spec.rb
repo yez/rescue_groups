@@ -9,15 +9,16 @@ module RescueGroups
         def self.all; end
       end
 
-      test_model = Struct.new("TestModel")
-      test_client = Struct.new("TestClient")
+      test_model = Struct.new('TestModel')
+      test_client = Struct.new('TestClient')
+      test_search_engine = Struct.new('TestSearchEngine')
 
       let(:conditions) { search_conditions }
       let(:search_conditions) { {} }
 
       describe '#initalize' do
 
-        subject { described_class.new(conditions, anything, anything) }
+        subject { described_class.new(conditions, anything, anything, anything) }
 
         it 'sets the conditions' do
           expect(subject.instance_variable_get(:@conditions)).to eq(search_conditions)
@@ -60,13 +61,13 @@ module RescueGroups
         end
       end
 
-      xdescribe '#request' do
+      describe '#request' do
         before do
           allow(test_model).to receive(:object_type)
           allow(test_model).to receive(:object_fields) { TestFields }
         end
 
-        subject { described_class.new(conditions, test_model, test_client) }
+        subject { described_class.new(conditions, test_model, test_client, anything) }
 
         it 'composes the request given the passed in objects' do
           expect(subject.instance_variable_get(:@client)).to receive(:post_and_respond)
@@ -81,21 +82,21 @@ module RescueGroups
         end
       end
 
-      xdescribe '#as_json' do
+      describe '#as_json' do
         before do
           allow(test_model).to receive(:object_type)
           allow(test_model).to receive(:object_fields) { TestFields }
+          allow(test_search_engine).to receive(:as_json)
         end
 
-        subject { described_class.new(conditions, test_model, anything) }
+        subject { described_class.new(conditions, test_model, test_client, test_search_engine) }
 
         it 'has the correct keys' do
           json_result = subject.as_json
 
           expect(json_result).to have_key(:objectAction)
           expect(json_result).to have_key(:objectType)
-          expect(json_result).to have_key(:fields)
-          expect(json_result).to have_key(:values)
+          expect(json_result).to have_key(:search)
         end
       end
     end
