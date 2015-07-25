@@ -58,21 +58,6 @@ module RescueGroups
 
       private
 
-      # method: find_body
-      # purpose: Return a hash of the queryable's object specific where criteria
-      #            to be used in a find call on RescueGroups remote
-      # param: ids <Array> - list of primary keys to find remote objects by
-      # return: <Hash> - hash containing a specific configuration for performing a
-      #           a find call on RescueGroups
-      def find_body(ids)
-        {
-          objectAction: :publicView,
-          objectType:   object_type,
-          fields:       object_fields.all,
-          values:       ids.map { |i| { object_fields::FIELDS[:id] => i } }
-        }
-      end
-
       # method: conditions_to_search_engine
       # purpose: Given a list of unmapped filters, call helper method
       #            key_to_rescue_groups_key and add the result to the search
