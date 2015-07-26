@@ -16,7 +16,7 @@ module RescueGroups
       let(:conditions) { search_conditions }
       let(:search_conditions) { {} }
 
-      describe '#initalize' do
+      describe '#initialize' do
 
         subject { described_class.new(conditions, anything, anything, anything) }
 
