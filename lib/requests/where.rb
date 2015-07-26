@@ -28,6 +28,19 @@ module RescueGroups
           search:       @search_engine.as_json,
         }
       end
+
+      private
+
+      def key_to_rescue_groups_key(&block)
+        fail('Block not given') unless block_given?
+        @conditions.each do |key, value|
+          mapped_key = @model.object_fields::FIELDS[key.to_sym]
+
+          next if mapped_key.nil?
+
+          yield mapped_key, value
+        end
+      end
     end
   end
 end

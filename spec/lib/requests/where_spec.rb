@@ -5,7 +5,7 @@ module RescueGroups
   module Requests
     describe Where do
       class TestFields
-        FIELDS = {}
+        FIELDS = { some_test_field: 'SomeTestField' }
         def self.all; end
       end
 
@@ -97,6 +97,52 @@ module RescueGroups
           expect(json_result).to have_key(:objectAction)
           expect(json_result).to have_key(:objectType)
           expect(json_result).to have_key(:search)
+        end
+      end
+
+      describe '!.key_to_rescue_groups_key' do
+        before do
+          allow(test_model).to receive(:object_fields) { TestFields }
+        end
+        subject { described_class.new(conditions, test_model, test_client, test_search_engine) }
+
+        context 'all filters have mappings' do
+          let(:conditions) { { some_test_field: value } }
+          let(:value)      { 'foo' }
+
+          it 'yields to the block for all filters' do
+            expect do |b|
+              subject.send(:key_to_rescue_groups_key, &b)
+            end.to yield_with_args('SomeTestField', value)
+          end
+        end
+
+        context 'some filters have mappings, others do not' do
+          let(:conditions) { { some_test_field: value, another_test_field: anything } }
+          let(:value)      { 'foo' }
+
+          it 'yields to the block only for mapped filters' do
+            expect do |b|
+              subject.send(:key_to_rescue_groups_key, &b)
+            end.to yield_with_args('SomeTestField', value)
+          end
+        end
+
+        context 'no filters have mappings' do
+          let(:conditions) { { foo: :bar } }
+          it 'does not yield to the block' do
+            expect do |b|
+              subject.send(:key_to_rescue_groups_key, &b)
+            end.to_not yield_control
+          end
+        end
+
+        context 'no block is given' do
+          it 'raises an error' do
+            expect do
+              subject.send(:key_to_rescue_groups_key)
+            end.to raise_error(/Block not given/)
+          end
         end
       end
     end
