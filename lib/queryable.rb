@@ -1,4 +1,5 @@
 require_relative './requests/find'
+require_relative './requests/where'
 
 module RescueGroups
   module Queryable
@@ -39,9 +40,9 @@ module RescueGroups
       def where(conditions)
         return find(conditions[:id]) if conditions.keys == [:id]
 
-        search_engine = conditions_to_search_engine(conditions)
+        where_request = Requests::Where.new(conditions, self, api_client, search_engine_class)
 
-        response = api_client.post_and_respond(where_body(search_engine))
+        response = where_request.request
 
         fail("Problem with request #{ response.error }") unless response.success?
 
@@ -49,7 +50,7 @@ module RescueGroups
 
         results_count = response['data'].keys.length
 
-        response['data'].merge(additional_request_data(response, search_engine))
+        response['data'].merge(additional_request_data(response, where_request))
 
         response['data'].map do |_data_id, data|
           new(data)
@@ -112,17 +113,15 @@ module RescueGroups
       #            many results were found in the search and how many were returned.
       # param: response - <Object> - Initial response from a where call with the count of
       #         found rows and returned values
-      # param: search_engine - <Object> - Search engine with all added fitlers used in the
-      #          original where call
       # return: <Hash> - Additional search results for the same filters
-      def additional_request_data(response, search_engine)
+      def additional_request_data(response, request)
         return {} if hit_request_limit?(response)
 
         {}.tap do |data|
-          (response['found_rows'] / search_engine.limit).times.each do |i|
-            search_engine.start = search_engine.limit * (i + 1)
+          (response['found_rows'] / request.search_engine.limit).times.each do |i|
+            request.update_conditions!(limit: request.search_engine.limit * (i + 1))
 
-            additional_results_response = api_client.post_and_respond(where_body(search_engine))
+            additional_results_response = request.request
             if !additional_results_response.success?
               fail("Problem with request #{ additional_results_response.error }")
             end

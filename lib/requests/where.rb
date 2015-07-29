@@ -1,6 +1,8 @@
 module RescueGroups
   module Requests
     class Where
+      attr_reader :search_engine
+
       def initialize(conditions, model, client, search_engine_class)
         modifiers = %i[limit start sort order]
 
@@ -13,7 +15,7 @@ module RescueGroups
         @conditions = conditions
         @model = model
         @client = client
-        @search_engine = search_engine(search_engine_class)
+        @search_engine = build_search_engine(search_engine_class)
       end
 
       def request
@@ -29,9 +31,13 @@ module RescueGroups
         }
       end
 
+      def update_conditions!(conditions)
+        @conditions.merge!(conditions)
+      end
+
       private
 
-      def search_engine(search_engine_class)
+      def build_search_engine(search_engine_class)
         args = {
           limit: @limit,
           start: @start,

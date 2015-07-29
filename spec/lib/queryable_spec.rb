@@ -184,7 +184,7 @@ module RescueGroups
         end
 
         it 'makes a filter with the mapped equality method' do
-          expect(Filter).to receive(:new).with("SomeTestField", :less_than, 1)
+          expect(Filter).to receive(:new).with("SomeTestField", :less_than, 1).and_call_original
           TestClass.where(some_test_field: equality_filter)
         end
       end
@@ -239,47 +239,6 @@ module RescueGroups
             expect(TestSearch).to receive(:new).with(sort: :breed).and_call_original
             TestClass.where(anything: anything, sort: :breed)
           end
-        end
-      end
-    end
-
-    describe '!.key_to_rescue_groups_key' do
-      context 'all filters have mappings' do
-        let(:conditions) { { some_test_field: value } }
-        let(:value)      { 'foo' }
-
-        it 'yields to the block for all filters' do
-          expect do |b|
-            TestClass.send(:key_to_rescue_groups_key, conditions, &b)
-          end.to yield_with_args('SomeTestField', value)
-        end
-      end
-
-      context 'some filters have mappings, others do not' do
-        let(:conditions) { { some_test_field: value, another_test_field: anything } }
-        let(:value)      { 'foo' }
-
-        it 'yields to the block only for mapped filters' do
-          expect do |b|
-            TestClass.send(:key_to_rescue_groups_key, conditions, &b)
-          end.to yield_with_args('SomeTestField', value)
-        end
-      end
-
-      context 'no filters have mappings' do
-        let(:conditions) { { foo: :bar } }
-        it 'does not yield to the block' do
-          expect do |b|
-            TestClass.send(:key_to_rescue_groups_key, conditions, &b)
-          end.to_not yield_control
-        end
-      end
-
-      context 'no block is given' do
-        it 'raises an error' do
-          expect do
-            TestClass.send(:key_to_rescue_groups_key, anything)
-          end.to raise_error(/Block not given/)
         end
       end
     end

@@ -65,7 +65,7 @@ module RescueGroups
         end
 
         it 'calls search_engine' do
-          expect_any_instance_of(described_class).to receive(:search_engine)
+          expect_any_instance_of(described_class).to receive(:build_search_engine)
           subject
         end
       end
@@ -158,7 +158,7 @@ module RescueGroups
         end
       end
 
-      describe '!#search_engine' do
+      describe '!#build_search_engine' do
         subject { described_class.new(conditions, anything, anything, TestSearchEngine) }
 
         let(:instance_vars_to_set) { {} }
@@ -175,7 +175,7 @@ module RescueGroups
 
             it 'initializes searh engine with all modifiers' do
               expect(TestSearchEngine).to receive(:new).with(limit: 100, start: 100)
-              subject.send(:search_engine, TestSearchEngine)
+              subject.send(:build_search_engine, TestSearchEngine)
             end
           end
 
@@ -184,7 +184,7 @@ module RescueGroups
 
             it 'initializes searh engine with the modifier' do
               expect(TestSearchEngine).to receive(:new).with(limit: 10)
-              subject.send(:search_engine, TestSearchEngine)
+              subject.send(:build_search_engine, TestSearchEngine)
             end
           end
         end
@@ -193,7 +193,7 @@ module RescueGroups
           it 'initializes searh engine without any args' do
             subject
             expect(TestSearchEngine).to receive(:new).with({})
-            subject.send(:search_engine, TestSearchEngine)
+            subject.send(:build_search_engine, TestSearchEngine)
           end
         end
       end
