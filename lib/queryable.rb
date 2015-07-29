@@ -59,54 +59,6 @@ module RescueGroups
 
       private
 
-      # method: conditions_to_search_engine
-      # purpose: Given a list of unmapped filters, call helper method
-      #            key_to_rescue_groups_key and add the result to the search
-      #            new search engine that is returned
-      # param: conditions <Hash> - conditions to conduct the search on
-      # return: <Object> -  instantiated search engine
-      #           with filters added
-      def conditions_to_search_engine(conditions)
-        search_engine = search_engine(conditions)
-
-        key_to_rescue_groups_key(conditions) do |mapped_key, val|
-          equality_operator = :equal
-
-          if val.is_a?(Hash)
-            equality_operator = val.keys[0]
-            val = val.values[0]
-          end
-
-          search_engine.add_filter(mapped_key, equality_operator, val)
-        end
-
-        search_engine
-      end
-
-      def search_engine(configuration)
-        args = {
-          limit: configuration[:limit],
-          start: configuration[:start],
-          sort: configuration[:sort],
-        }.reject { |_, v| v.nil? }
-
-        search_engine_class.new(**args)
-      end
-
-      # method: where_body
-      # purpose: Return a hash of the queryable's object specific where criteria
-      #            to be used in a search call on RescueGroups remote
-      # param: search_engine - <Object> - instantiated search engine
-      # return: <Hash> - hash containing a specific configuration for performing a
-      #           a search on RescueGroups
-      def where_body(search_engine)
-        {
-          objectAction: :publicSearch,
-          objectType:   object_type,
-          search:       search_engine.as_json,
-        }
-      end
-
       # method: additional_request_data
       # purpose: Alter the limit of a passed in search engine passed on an initial response
       #            of a where request. The limit is increased by 1x per the difference of how
@@ -138,24 +90,6 @@ module RescueGroups
       def hit_request_limit?(response)
         return true unless !response.nil? && !response['data'].nil? && !response['data'].empty?
         response['found_rows'].nil? || response['data'].keys.length >= response['found_rows']
-      end
-
-      # method: key_to_rescue_groups_key
-      # purpose: map conditional arguments given to
-      #          their corresponding filters
-      # example: key_to_rescue_groups_key(eye_color: 'brown')
-      #          #=> Filter.new(name: 'animalEyeColor', operation: 'equal', criteria: 'brown')
-      # params: conditions - <Hash> - conditions passed from .where
-      #         block - <Block> - evaluated block with the mapped key and value
-      def key_to_rescue_groups_key(conditions, &block)
-        fail('Block not given') unless block_given?
-        conditions.each do |key, value|
-          mapped_key = object_fields::FIELDS[key.to_sym]
-
-          next if mapped_key.nil?
-
-          yield mapped_key, value
-        end
       end
     end
   end
