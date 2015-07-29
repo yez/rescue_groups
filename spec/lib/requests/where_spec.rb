@@ -9,16 +9,17 @@ module RescueGroups
         def self.all; end
       end
 
+      class TestSearchEngine < Struct.new(:limit, :start, :sort, :order); end
+
       test_model = Struct.new('TestModel')
       test_client = Struct.new('TestClient')
-      test_search_engine = Struct.new('TestSearchEngine')
 
       let(:conditions) { search_conditions }
       let(:search_conditions) { {} }
 
       describe '#initialize' do
 
-        subject { described_class.new(conditions, anything, anything, anything) }
+        subject { described_class.new(conditions, anything, anything, TestSearchEngine) }
 
         it 'sets the conditions' do
           expect(subject.instance_variable_get(:@conditions)).to eq(search_conditions)
@@ -59,15 +60,21 @@ module RescueGroups
             end
           end
         end
+
+        it 'calls search_engine' do
+          expect_any_instance_of(described_class).to receive(:search_engine)
+          subject
+        end
       end
 
       describe '#request' do
         before do
           allow(test_model).to receive(:object_type)
           allow(test_model).to receive(:object_fields) { TestFields }
+          allow_any_instance_of(TestSearchEngine).to receive(:as_json)
         end
 
-        subject { described_class.new(conditions, test_model, test_client, anything) }
+        subject { described_class.new(conditions, test_model, test_client, TestSearchEngine) }
 
         it 'composes the request given the passed in objects' do
           expect(subject.instance_variable_get(:@client)).to receive(:post_and_respond)
@@ -86,10 +93,10 @@ module RescueGroups
         before do
           allow(test_model).to receive(:object_type)
           allow(test_model).to receive(:object_fields) { TestFields }
-          allow(test_search_engine).to receive(:as_json)
+          allow_any_instance_of(TestSearchEngine).to receive(:as_json)
         end
 
-        subject { described_class.new(conditions, test_model, test_client, test_search_engine) }
+        subject { described_class.new(conditions, test_model, test_client, TestSearchEngine) }
 
         it 'has the correct keys' do
           json_result = subject.as_json
@@ -100,11 +107,11 @@ module RescueGroups
         end
       end
 
-      describe '!.key_to_rescue_groups_key' do
+      describe '!#key_to_rescue_groups_key' do
         before do
           allow(test_model).to receive(:object_fields) { TestFields }
         end
-        subject { described_class.new(conditions, test_model, test_client, test_search_engine) }
+        subject { described_class.new(conditions, test_model, test_client, TestSearchEngine) }
 
         context 'all filters have mappings' do
           let(:conditions) { { some_test_field: value } }
@@ -142,6 +149,46 @@ module RescueGroups
             expect do
               subject.send(:key_to_rescue_groups_key)
             end.to raise_error(/Block not given/)
+          end
+        end
+      end
+
+      describe '!#search_engine' do
+        subject { described_class.new(conditions, anything, anything, TestSearchEngine) }
+
+        let(:instance_vars_to_set) { {} }
+
+        before do
+          instance_vars_to_set.each do |key, value|
+            subject.instance_variable_set(:"@#{ key }", value)
+          end
+        end
+
+        context 'modifiers exist in conditions' do
+          context 'multiple modifiers' do
+            let(:instance_vars_to_set) { { limit: 100, start: 100 } }
+
+            it 'initializes searh engine with all modifiers' do
+              expect(TestSearchEngine).to receive(:new).with(limit: 100, start: 100)
+              subject.send(:search_engine, TestSearchEngine)
+            end
+          end
+
+          context 'a single modifier' do
+            let(:instance_vars_to_set) { { limit: 10 } }
+
+            it 'initializes searh engine with the modifier' do
+              expect(TestSearchEngine).to receive(:new).with(limit: 10)
+              subject.send(:search_engine, TestSearchEngine)
+            end
+          end
+        end
+
+        context 'modifiers do not exist in the conditions' do
+          it 'initializes searh engine without any args' do
+            subject
+            expect(TestSearchEngine).to receive(:new).with({})
+            subject.send(:search_engine, TestSearchEngine)
           end
         end
       end

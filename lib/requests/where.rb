@@ -1,7 +1,7 @@
 module RescueGroups
   module Requests
     class Where
-      def initialize(conditions, model, client, search_engine)
+      def initialize(conditions, model, client, search_engine_class)
         modifiers = %i[limit start sort order]
 
         conditions.each do |key, value|
@@ -13,7 +13,7 @@ module RescueGroups
         @conditions = conditions
         @model = model
         @client = client
-        @search_engine = search_engine
+        @search_engine = search_engine(search_engine_class)
       end
 
       def request
@@ -30,6 +30,16 @@ module RescueGroups
       end
 
       private
+
+      def search_engine(search_engine_class)
+        args = {
+          limit: @limit,
+          start: @start,
+          sort: @sort,
+        }.reject { |_, v| v.nil? }
+
+        search_engine_class.new(**args)
+      end
 
       def key_to_rescue_groups_key(&block)
         fail('Block not given') unless block_given?
