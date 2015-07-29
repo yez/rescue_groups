@@ -38,10 +38,27 @@ module RescueGroups
           sort: @sort,
         }.reject { |_, v| v.nil? }
 
-        search_engine_class.new(**args)
+        search = search_engine_class.new(**args)
+
+        add_filters_to_search_engine(search)
+
+        search
       end
 
-      def key_to_rescue_groups_key(&block)
+      def add_filters_to_search_engine(search)
+        conditions_to_rescue_groups_key_value do |mapped_key, val|
+          equality_operator = :equal
+
+          if val.is_a?(Hash)
+            equality_operator = val.keys[0]
+            val = val.values[0]
+          end
+
+          search.add_filter(mapped_key, equality_operator, val)
+        end
+      end
+
+      def conditions_to_rescue_groups_key_value(&block)
         fail('Block not given') unless block_given?
         @conditions.each do |key, value|
           mapped_key = @model.object_fields::FIELDS[key.to_sym]

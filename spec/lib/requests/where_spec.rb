@@ -9,7 +9,10 @@ module RescueGroups
         def self.all; end
       end
 
-      class TestSearchEngine < Struct.new(:limit, :start, :sort, :order); end
+      class TestSearchEngine < Struct.new(:limit, :start, :sort, :order)
+        def add_filter(*args)
+        end
+      end
 
       test_model = Struct.new('TestModel')
       test_client = Struct.new('TestClient')
@@ -107,10 +110,12 @@ module RescueGroups
         end
       end
 
-      describe '!#key_to_rescue_groups_key' do
+      describe '!#conditions_to_rescue_groups_key_value' do
         before do
           allow(test_model).to receive(:object_fields) { TestFields }
+          allow_any_instance_of(TestSearchEngine).to receive(:add_filter)
         end
+
         subject { described_class.new(conditions, test_model, test_client, TestSearchEngine) }
 
         context 'all filters have mappings' do
@@ -119,7 +124,7 @@ module RescueGroups
 
           it 'yields to the block for all filters' do
             expect do |b|
-              subject.send(:key_to_rescue_groups_key, &b)
+              subject.send(:conditions_to_rescue_groups_key_value, &b)
             end.to yield_with_args('SomeTestField', value)
           end
         end
@@ -130,7 +135,7 @@ module RescueGroups
 
           it 'yields to the block only for mapped filters' do
             expect do |b|
-              subject.send(:key_to_rescue_groups_key, &b)
+              subject.send(:conditions_to_rescue_groups_key_value, &b)
             end.to yield_with_args('SomeTestField', value)
           end
         end
@@ -139,7 +144,7 @@ module RescueGroups
           let(:conditions) { { foo: :bar } }
           it 'does not yield to the block' do
             expect do |b|
-              subject.send(:key_to_rescue_groups_key, &b)
+              subject.send(:conditions_to_rescue_groups_key_value, &b)
             end.to_not yield_control
           end
         end
@@ -147,7 +152,7 @@ module RescueGroups
         context 'no block is given' do
           it 'raises an error' do
             expect do
-              subject.send(:key_to_rescue_groups_key)
+              subject.send(:conditions_to_rescue_groups_key_value)
             end.to raise_error(/Block not given/)
           end
         end
@@ -189,6 +194,33 @@ module RescueGroups
             subject
             expect(TestSearchEngine).to receive(:new).with({})
             subject.send(:search_engine, TestSearchEngine)
+          end
+        end
+      end
+
+      describe '!#add_filters_to_search_engine' do
+        subject { described_class.new(conditions, anything, anything, TestSearchEngine) }
+
+        context 'conditions are not empty' do
+          let(:conditions) { { foo: :bar } }
+
+          before do
+            allow_any_instance_of(described_class)
+              .to receive(:conditions_to_rescue_groups_key_value).with(no_args).and_yield(:foo, :bar)
+          end
+
+          it 'calls add_filter per condition' do
+            subject
+            expect_any_instance_of(TestSearchEngine)
+              .to receive(:add_filter).with(:foo, :equal, :bar)
+            subject.send(:add_filters_to_search_engine, TestSearchEngine.new)
+          end
+        end
+
+        context 'conditions are empty' do
+          it 'does not call add_filter' do
+            expect_any_instance_of(TestSearchEngine).to_not receive(:add_filter)
+            subject.send(:add_filters_to_search_engine, TestSearchEngine.new)
           end
         end
       end
