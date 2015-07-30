@@ -20,10 +20,9 @@ module RescueGroups
       let(:conditions) { search_conditions }
       let(:search_conditions) { {} }
 
+      subject { described_class.new(conditions, test_model, test_client, TestSearchEngine) }
+
       describe '#initialize' do
-
-        subject { described_class.new(conditions, anything, anything, TestSearchEngine) }
-
         it 'sets the conditions' do
           expect(subject.instance_variable_get(:@conditions)).to eq(search_conditions)
         end
@@ -77,8 +76,6 @@ module RescueGroups
           allow_any_instance_of(TestSearchEngine).to receive(:as_json)
         end
 
-        subject { described_class.new(conditions, test_model, test_client, TestSearchEngine) }
-
         it 'composes the request given the passed in objects' do
           expect(subject.instance_variable_get(:@client)).to receive(:post_and_respond)
           expect(subject).to receive(:as_json)
@@ -99,8 +96,6 @@ module RescueGroups
           allow_any_instance_of(TestSearchEngine).to receive(:as_json)
         end
 
-        subject { described_class.new(conditions, test_model, test_client, TestSearchEngine) }
-
         it 'has the correct keys' do
           json_result = subject.as_json
 
@@ -110,13 +105,55 @@ module RescueGroups
         end
       end
 
+      describe '#can_request_more?' do
+        let(:response) { { 'data' => data, 'found_rows' => found_rows } }
+        let(:data) { {} }
+        let(:found_rows) { 0 }
+
+        before do
+          subject.instance_variable_set(:@response, response)
+        end
+
+        context 'response returns no results' do
+          it 'returns false' do
+            expect(subject.can_request_more?).to eq(false)
+          end
+        end
+
+        context 'response does not return a found_rows count' do
+          let(:found_rows) { nil }
+
+          it 'returns false' do
+            expect(subject.can_request_more?).to eq(false)
+          end
+        end
+
+        context 'response returns found_rows and results' do
+          let(:data) { { foo: anything, bar: anything } }
+
+          context 'returned rows is less than found_rows' do
+            let(:found_rows) { 3 }
+
+            it 'returns true' do
+              expect(subject.can_request_more?).to eq(true)
+            end
+          end
+
+          context 'returned rows is equal to found_rows' do
+            let(:found_rows) { 2 }
+
+            it 'returns false' do
+              expect(subject.can_request_more?).to eq(false)
+            end
+          end
+        end
+      end
+
       describe '!#conditions_to_rescue_groups_key_value' do
         before do
           allow(test_model).to receive(:object_fields) { TestFields }
           allow_any_instance_of(TestSearchEngine).to receive(:add_filter)
         end
-
-        subject { described_class.new(conditions, test_model, test_client, TestSearchEngine) }
 
         context 'all filters have mappings' do
           let(:conditions) { { some_test_field: value } }
@@ -159,8 +196,6 @@ module RescueGroups
       end
 
       describe '!#build_search_engine' do
-        subject { described_class.new(conditions, anything, anything, TestSearchEngine) }
-
         let(:instance_vars_to_set) { {} }
 
         before do
@@ -199,8 +234,6 @@ module RescueGroups
       end
 
       describe '!#add_filters_to_search_engine' do
-        subject { described_class.new(conditions, anything, anything, TestSearchEngine) }
-
         context 'conditions are not empty' do
           let(:conditions) { { foo: :bar } }
 

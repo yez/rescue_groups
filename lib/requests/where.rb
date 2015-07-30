@@ -20,7 +20,7 @@ module RescueGroups
 
       def request
         raise 'Improper client given to Requests::Find' unless @client.respond_to?(:post_and_respond)
-        @client.post_and_respond(as_json)
+        @response ||= @client.post_and_respond(as_json)
       end
 
       def as_json(*)
@@ -33,6 +33,11 @@ module RescueGroups
 
       def update_conditions!(conditions)
         @conditions.merge!(conditions)
+      end
+
+      def can_request_more?
+        return false if @response.nil? || @response['data'].nil? || @response['data'].empty?
+        !@response['found_rows'].nil? && @response['data'].keys.length < @response['found_rows']
       end
 
       private
