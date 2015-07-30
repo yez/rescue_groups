@@ -20,7 +20,7 @@ module RescueGroups
 
       def request
         raise 'Improper client given to Requests::Find' unless @client.respond_to?(:post_and_respond)
-        @response ||= @client.post_and_respond(as_json)
+        @client.post_and_respond(as_json)
       end
 
       def as_json(*)
