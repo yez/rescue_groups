@@ -1,7 +1,7 @@
 module RescueGroups
   module Requests
     class Where
-      attr_reader :search_engine
+      attr_reader :search_engine, :results
 
       def initialize(conditions, model, client, search_engine_class)
         modifiers = %i[limit start sort order]
@@ -16,11 +16,19 @@ module RescueGroups
         @model = model
         @client = client
         @search_engine = build_search_engine(search_engine_class)
+        @results = { 'data' => {} }
       end
 
       def request
         raise 'Improper client given to Requests::Find' unless @client.respond_to?(:post_and_respond)
-        @client.post_and_respond(as_json)
+        response = @client.post_and_respond(as_json)
+
+        if response.success?
+          @results['found_rows'] = response['found_rows']
+          @results['data'].merge!(response['data'])
+        end
+
+        response
       end
 
       def as_json(*)
@@ -36,8 +44,8 @@ module RescueGroups
       end
 
       def can_request_more?
-        return false if @response.nil? || @response['data'].nil? || @response['data'].empty?
-        !@response['found_rows'].nil? && @response['data'].keys.length < @response['found_rows']
+        return false if results.nil? || results['data'].nil? || results['data'].empty?
+        !results['found_rows'].nil? && results['data'].keys.length < results['found_rows']
       end
 
       private

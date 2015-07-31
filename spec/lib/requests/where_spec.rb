@@ -70,6 +70,11 @@ module RescueGroups
       end
 
       describe '#request' do
+        let(:response) do
+          TestResponse.new(200,
+            { 'status' => 'ok', 'data' => {}, 'found_rows' => 0 })
+        end
+
         before do
           allow(test_model).to receive(:object_type)
           allow(test_model).to receive(:object_fields) { TestFields }
@@ -77,7 +82,7 @@ module RescueGroups
         end
 
         it 'composes the request given the passed in objects' do
-          expect(subject.instance_variable_get(:@client)).to receive(:post_and_respond)
+          expect(subject.instance_variable_get(:@client)).to receive(:post_and_respond) { response }
           expect(subject).to receive(:as_json)
           subject.request
         end
@@ -111,7 +116,7 @@ module RescueGroups
         let(:found_rows) { 0 }
 
         before do
-          subject.instance_variable_set(:@response, response)
+          subject.instance_variable_set(:@results, response)
         end
 
         context 'response returns no results' do

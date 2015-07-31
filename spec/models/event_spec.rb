@@ -54,7 +54,7 @@ module RescueGroups
             .to receive_message_chain(:post_and_respond, :success?) { true }
 
           allow_any_instance_of(RemoteClient)
-            .to receive_message_chain(:post_and_respond, :[]) { [] }
+            .to receive_message_chain(:post_and_respond, :[]) { {} }
 
           described_class.where(conditions)
         end

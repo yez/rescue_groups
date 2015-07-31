@@ -46,50 +46,28 @@ module RescueGroups
 
         fail("Problem with request #{ response.error }") unless response.success?
 
-        return [] if response['data'].nil? || response['data'].empty?
+        response_with_additional = additional_request_data(where_request)
 
-        results_count = response['data'].keys.length
-
-        response['data'].merge(additional_request_data(response, where_request))
-
-        response['data'].map do |_data_id, data|
+        response_with_additional['data'].map do |_data_id, data|
           new(data)
         end
       end
 
       private
 
-      # method: additional_request_data
-      # purpose: Alter the limit of a passed in search engine passed on an initial response
-      #            of a where request. The limit is increased by 1x per the difference of how
-      #            many results were found in the search and how many were returned.
-      # param: response - <Object> - Initial response from a where call with the count of
-      #         found rows and returned values
-      # return: <Hash> - Additional search results for the same filters
-      def additional_request_data(response, request)
-        return {} if hit_request_limit?(response)
+      def additional_request_data(request)
+        return request.results unless request.can_request_more?
 
-        {}.tap do |data|
-          (response['found_rows'] / request.search_engine.limit).times.each do |i|
-            request.update_conditions!(limit: request.search_engine.limit * (i + 1))
+        (request.results['found_rows'] / request.search_engine.limit).times.each do |i|
+          request.update_conditions!(limit: request.search_engine.limit * (i + 1))
 
-            additional_results_response = request.request
-            if !additional_results_response.success?
-              fail("Problem with request #{ additional_results_response.error }")
-            end
-
-            data.merge(additional_results_response['data'])
+          additional_results_response = request.request
+          if !additional_results_response.success?
+            fail("Problem with request #{ additional_results_response.error }")
           end
         end
-      end
 
-      # method: hit_request_limit?
-      # purpose: Determine if the response has more data inline than the found_rows
-      # param: response - <Object> - Response from RescueGroups
-      # return: <Boolean>
-      def hit_request_limit?(response)
-        return true unless !response.nil? && !response['data'].nil? && !response['data'].empty?
-        response['found_rows'].nil? || response['data'].keys.length >= response['found_rows']
+        request.results
       end
     end
   end

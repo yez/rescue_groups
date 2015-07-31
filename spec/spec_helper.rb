@@ -126,7 +126,7 @@ RSpec.configure do |config|
         headers: headers)
       .to_return(
         status: SUCCESS,
-        body: '{ "data": [] }',
+        body: '{ "data": {} }',
         headers: headers)
 
     stub_request(
@@ -210,7 +210,7 @@ RSpec.configure do |config|
         headers: headers)
       .to_return(
         status: SUCCESS,
-        body: '{ "data": [] }',
+        body: '{ "data": {} }',
         headers: headers)
 
     stub_request(
@@ -334,7 +334,7 @@ RSpec.configure do |config|
         headers: headers)
       .to_return(
         status: SUCCESS,
-        body: '{ "data": [] }',
+        body: '{ "data": {} }',
         headers: headers)
   end
 end
