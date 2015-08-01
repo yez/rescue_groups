@@ -23,7 +23,7 @@ module RescueGroups
         raise 'Improper client given to Requests::Find' unless @client.respond_to?(:post_and_respond)
         response = @client.post_and_respond(as_json)
 
-        if response.success?
+        if response.success? && !response['data'].empty?
           @results['found_rows'] = response['found_rows']
           @results['data'].merge!(response['data'])
         end
