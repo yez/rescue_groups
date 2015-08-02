@@ -36,6 +36,20 @@ module RescueGroups
       end
     end
 
+    def initialize(*args)
+      super
+
+      extract_pictures if !@pictures.nil? && !@pictures.empty?
+    end
+
     attr_accessor *object_fields::FIELDS.keys
+
+    private
+
+    def extract_pictures
+      @pictures.map! do |picture_data|
+        Picture.new(picture_data)
+      end
+    end
   end
 end

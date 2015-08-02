@@ -7,6 +7,18 @@ module RescueGroups
     known_attributes = { animalID: 12, animalDeclawed: true, animalName: :snuffles }
     it_behaves_like 'a model', known_attributes
 
+    describe '#initialize' do
+      context 'picture are present' do
+        let(:pictures) {{ described_class.object_fields::FIELDS[:pictures] => [anything] }}
+        let(:attributes) { known_attributes.merge(pictures) }
+
+        it 'extracts them' do
+          expect_any_instance_of(described_class).to receive(:extract_pictures)
+          described_class.new(attributes)
+        end
+      end
+    end
+
     describe '.find' do
       context 'animal is found' do
         it 'does not raise error' do
@@ -91,6 +103,23 @@ module RescueGroups
 
       it 'defines #organization=' do
         expect(subject).to respond_to(:organization=)
+      end
+    end
+
+    describe '!#extract_pictures' do
+      let(:picture_attribute) { described_class.object_fields::FIELDS[:pictures] }
+      let(:pictures) { [{ test: :picture }, { foo: :bar }, { baz: :qux }] }
+      it 'intializes a new picture class per picture' do
+        pictures.each do |picture|
+          expect(RescueGroups::Picture).to receive(:new).with(picture)
+        end
+
+        described_class.new(picture_attribute => pictures)
+      end
+
+      it 'turns the @pictures for the model into pictures' do
+        model = described_class.new(picture_attribute => pictures)
+        expect(model.pictures.all? { |p| p.is_a?(RescueGroups::Picture) }).to eq(true)
       end
     end
   end
