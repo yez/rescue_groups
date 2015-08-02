@@ -1,6 +1,7 @@
 require_relative './api_client'
 require_relative '../lib/queryable'
 require_relative '../lib/relationable'
+require_relative '../models/picture'
 
 module RescueGroups
   class RemoteModel
@@ -20,6 +21,8 @@ module RescueGroups
         next unless self.respond_to?(mapped_method)
         self.send(mapped_method, value)
       end
+
+      extract_pictures if !@pictures.nil? && !@pictures.empty?
     end
 
     # method: attributes
@@ -33,6 +36,14 @@ module RescueGroups
         self.class.object_fields::FIELDS.keys.each do |attribute|
           hash[attribute] = instance_variable_get(:"@#{ attribute }")
         end
+      end
+    end
+
+    private
+
+    def extract_pictures
+      @pictures.map! do |picture_data|
+        Picture.new(picture_data)
       end
     end
   end
