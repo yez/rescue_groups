@@ -26,5 +26,13 @@ module RescueGroups
         self.send(:"#{ mapped_key }=", value) unless mapped_key.nil?
       end
     end
+
+    def thumb
+      insecure_url_thumb
+    end
+
+    def full
+      insecure_url_full
+    end
   end
 end
