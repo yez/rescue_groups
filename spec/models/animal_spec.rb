@@ -9,12 +9,16 @@ module RescueGroups
 
     describe '#initialize' do
       context 'picture are present' do
-        let(:pictures) {{ described_class.object_fields::FIELDS[:pictures] => [anything] }}
-        let(:attributes) { known_attributes.merge(pictures) }
 
         it 'extracts them' do
           expect_any_instance_of(described_class).to receive(:extract_pictures)
-          described_class.new(attributes)
+          described_class.find(TEST_ANIMAL_ID)
+        end
+
+        it 'is actual pictures' do
+          animal = described_class.find(TEST_ANIMAL_ID)
+          expect(animal.pictures).to_not be_empty
+          expect(animal.pictures.all? { |p| p.is_a?(Picture) }).to eq(true)
         end
       end
     end

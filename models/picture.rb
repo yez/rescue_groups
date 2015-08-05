@@ -22,7 +22,7 @@ module RescueGroups
 
     def initialize(attribute_hash = {})
       attribute_hash.each do |key, value|
-        mapped_key = FIELDS[key]
+        mapped_key = FIELDS[key.to_sym]
         self.send(:"#{ mapped_key }=", value) unless mapped_key.nil?
       end
     end
