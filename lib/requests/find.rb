@@ -1,5 +1,7 @@
 module RescueGroups
   module Requests
+    class InvalidClient < StandardError; end
+
     class Find
       def initialize(ids, model, client)
         @ids = [*ids].flatten.uniq.map(&:to_i)
@@ -10,7 +12,7 @@ module RescueGroups
       end
 
       def request
-        raise 'Improper client given to Requests::Find' unless @client.respond_to?(:post_and_respond)
+        raise InvalidClient, 'Invalid client given to Requests::Find' unless @client.respond_to?(:post_and_respond)
         @client.post_and_respond(as_json)
       end
 

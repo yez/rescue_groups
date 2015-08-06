@@ -70,7 +70,7 @@ module RescueGroups
 
         context 'client is improper object' do
           it 'raises error' do
-            expect { subject.request }.to raise_error(/Improper client/)
+            expect { subject.request }.to raise_error(InvalidClient, /Invalid client/)
           end
         end
       end
