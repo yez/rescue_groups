@@ -1,5 +1,7 @@
 module RescueGroups
   class Filter
+    class InvalidFilter < StandardError; end
+
     attr_reader :name, :operation, :criteria
 
     OPERATIONS = {
@@ -27,7 +29,7 @@ module RescueGroups
     # return: none
     def initialize(name, operation, criteria)
       @name      = name
-      @operation = OPERATIONS[operation] or fail 'Invalid operation given'
+      @operation = OPERATIONS[operation] or fail InvalidFilter, 'Invalid operation given'
       @criteria  = criteria
     end
 

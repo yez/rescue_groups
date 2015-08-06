@@ -20,9 +20,7 @@ module RescueGroups
       context 'with an uknown operation' do
         let(:operation) { :banana }
         it 'raises an exception about an unknown operator' do
-          expect do
-            subject
-          end.to raise_error
+          expect { subject }.to raise_error(described_class::InvalidFilter)
         end
       end
     end
@@ -34,15 +32,6 @@ module RescueGroups
           expect(result).to have_key(:fieldName)
           expect(result).to have_key(:operation)
           expect(result).to have_key(:criteria)
-        end
-      end
-
-      context 'with a nil operation' do
-        let(:operation) { nil }
-        it 'raises an error' do
-          expect do
-            subject.as_json
-          end.to raise_error(/Invalid operation given/)
         end
       end
     end
