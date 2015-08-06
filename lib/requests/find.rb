@@ -1,7 +1,7 @@
+require_relative './invalid_client'
+
 module RescueGroups
   module Requests
-    class InvalidClient < StandardError; end
-
     class Find
       def initialize(ids, model, client)
         @ids = [*ids].flatten.uniq.map(&:to_i)

@@ -1,3 +1,5 @@
+require_relative './invalid_client'
+
 module RescueGroups
   module Requests
     class Where
@@ -20,7 +22,7 @@ module RescueGroups
       end
 
       def request
-        raise 'Improper client given to Requests::Find' unless @client.respond_to?(:post_and_respond)
+        raise InvalidClient, 'Invalid client given to Requests::Where' unless @client.respond_to?(:post_and_respond)
         response = @client.post_and_respond(as_json)
 
         if response.success? && !response['data'].empty?
