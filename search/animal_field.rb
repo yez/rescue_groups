@@ -138,7 +138,7 @@ module RescueGroups
       pictures:                  :animalPictures,
       videos:                    :animalVideos,
       video_urls:                :animalVideoUrls,
-    }
+    }.freeze
 
     # method: all
     # purpose: Return the values of FIELDS for easy use in

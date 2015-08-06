@@ -21,7 +21,7 @@ module RescueGroups
       location_phone:       :locationPhone,
       location_phone_ext:   :locationPhoneExt,
       location_events:      :locationEvents,
-    }
+    }.freeze
 
     # method: all
     # purpose: Return the values of FIELDS for easy use in

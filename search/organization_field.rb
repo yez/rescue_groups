@@ -26,7 +26,7 @@ module RescueGroups
       sponsorship_url:           :orgSponsorshipUrl,
       type:                      :orgType,
       website_url:               :orgWebsiteUrl,
-    }
+    }.freeze
 
     # method: all
     # purpose: Return the values of FIELDS for easy use in

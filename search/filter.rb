@@ -1,6 +1,6 @@
 module RescueGroups
   class Filter
-    attr_accessor :name, :operation, :criteria
+    attr_reader :name, :operation, :criteria
 
     OPERATIONS = {
       equal:                 :equal,
@@ -14,7 +14,7 @@ module RescueGroups
       blank:                 :blank,
       not_blank:             :notblank,
       radius:                :radius
-    }
+    }.freeze
 
     # method: initialize
     # purpose: Set important instance variables for a new Filter
@@ -37,7 +37,6 @@ module RescueGroups
     # param: none
     # return: <Hash> - keyed values of local variables
     def as_json
-      fail('Invalid operation given') unless !operation.nil?
       {
         fieldName: name,
         operation: operation,
