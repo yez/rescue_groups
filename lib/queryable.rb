@@ -2,6 +2,9 @@ require_relative './requests/find'
 require_relative './requests/where'
 
 module RescueGroups
+  class NotFound < StandardError; end
+  class InvalidRequest < StandardError; end
+
   module Queryable
     # This method is called when the Queryable Module is included
     #   in a class.
@@ -22,7 +25,7 @@ module RescueGroups
         response = find_request.request
 
         unless response.success? && !response['data'].nil? && !response['data'].empty?
-          fail "Unable to find #{ self.name } with id: #{ ids }"
+          fail(NotFound, "Unable to find #{ self.name } with id: #{ ids }")
         end
 
         objects = response['data'].map { |data| new(data) }
@@ -44,7 +47,7 @@ module RescueGroups
 
         response = where_request.request
 
-        fail("Problem with request #{ response.error }") unless response.success?
+        fail(InvalidRequest, "Problem with request #{ response.error }") unless response.success?
 
         response_with_additional = additional_request_data(where_request)
 
@@ -63,7 +66,7 @@ module RescueGroups
 
           additional_results_response = request.request
           if !additional_results_response.success?
-            fail("Problem with request #{ additional_results_response.error }")
+            fail(InvalidRequest, "Problem with request #{ additional_results_response.error }")
           end
         end
 

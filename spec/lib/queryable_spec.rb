@@ -80,7 +80,7 @@ module RescueGroups
           it 'raises an exception' do
             expect do
               TestClass.find(-1)
-            end.to raise_error(/Unable to find/)
+            end.to raise_error(NotFound, /Unable to find/)
           end
         end
       end
@@ -94,7 +94,7 @@ module RescueGroups
         it 'raises an exception' do
           expect do
             TestClass.find(20)
-          end.to raise_error(/Unable to find/)
+          end.to raise_error(NotFound, /Unable to find/)
         end
       end
     end
@@ -164,7 +164,7 @@ module RescueGroups
           it 'raises error' do
             expect do
               TestClass.where(anything: anything)
-            end.to raise_error(/Problem with request/)
+            end.to raise_error(InvalidRequest, /Problem with request/)
           end
         end
       end
