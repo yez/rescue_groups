@@ -1,4 +1,4 @@
-require_relative '../config/initializer'
+require_relative '../rescue_groups'
 
 RescueGroups.configuration do |config|
   config.apikey = 'test_api_key'

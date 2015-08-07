@@ -39,17 +39,8 @@ module RescueGroups
           end
         end
 
-        define_method :"#{ relationship }=" do |value|
-          instance_variable_set(:"@#{ relationship }", value)
-        end
-
-        define_method :"#{ relationship }_id" do
-          instance_variable_get(:"@#{ relationship }_id")
-        end
-
-        define_method :"#{ relationship }_id=" do |value|
-          instance_variable_set(:"@#{ relationship }_id", value)
-        end
+        attr_writer relationship, :"#{ relationship }_id"
+        attr_reader :"#{ relationship }_id"
       end
       # method: has_many
       # purpose: define methods that denote a relationship
@@ -78,9 +69,7 @@ module RescueGroups
           klass.where(foreign_key.to_sym => @id)
         end
 
-        define_method :"#{ relationship }=" do |value|
-          instance_variable_set(:"@#{ relationship }", value)
-        end
+        attr_writer relationship
       end
     end
   end
