@@ -44,5 +44,12 @@ module RescueGroups
         end
       end
     end
+
+    describe '#animal' do
+      it { expect(subject).to respond_to(:animal) }
+      it { expect(subject).to respond_to(:animal=) }
+      it { expect(subject).to respond_to(:animal_id) }
+      it { expect(subject).to respond_to(:animal_id=) }
+    end
   end
 end

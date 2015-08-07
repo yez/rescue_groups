@@ -1,5 +1,9 @@
 module RescueGroups
   class Picture
+    include Relationable
+
+    belongs_to :animal
+
     FIELDS = {
       mediaID:              :id,
       mediaOrder:           :order,
