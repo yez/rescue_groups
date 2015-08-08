@@ -44,6 +44,12 @@ module RescueGroups
           expect(picture.full).to_not be_nil
         end
       end
+
+      it 'all pictures have the right animal id' do
+        subject.pictures.each do |picture|
+          expect(picture.animal_id).to eq(TEST_ANIMAL_ID)
+        end
+      end
     end
   end
 end

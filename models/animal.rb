@@ -48,7 +48,11 @@ module RescueGroups
 
     def extract_pictures
       @pictures.map! do |picture_data|
-        Picture.new(picture_data)
+        Picture.new(picture_data).tap do |picture|
+          # TODO: make models understand that their ids and foreign
+          #   keys should be integers so this isn't necessary
+          picture.animal_id = self.id.to_i
+        end
       end
     end
   end
