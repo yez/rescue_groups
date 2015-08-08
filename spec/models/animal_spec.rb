@@ -113,9 +113,10 @@ module RescueGroups
     describe '!#extract_pictures' do
       let(:picture_attribute) { described_class.object_fields::FIELDS[:pictures] }
       let(:pictures) { [{ test: :picture }, { foo: :bar }, { baz: :qux }] }
+
       it 'intializes a new picture class per picture' do
         pictures.each do |picture|
-          expect(RescueGroups::Picture).to receive(:new).with(picture)
+          expect(RescueGroups::Picture).to receive(:new).with(picture).and_call_original
         end
 
         described_class.new(picture_attribute => pictures)
