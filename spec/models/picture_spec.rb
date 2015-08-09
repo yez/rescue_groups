@@ -45,6 +45,38 @@ module RescueGroups
       end
     end
 
+    describe '#url' do
+      context 'secure' do
+        it 'calls the secure attribute' do
+          expect(subject).to receive(:url_full)
+          subject.url(secure: true)
+        end
+      end
+
+      context 'default behaviour' do
+        it 'calls the default attribute' do
+          expect(subject).to receive(:insecure_url_full)
+          subject.url
+        end
+      end
+    end
+
+    describe '#url_thumb' do
+      context 'secure' do
+        it 'calls the secure attribute' do
+          expect(subject).to receive(:url_thumbnail)
+          subject.url_thumb(secure: true)
+        end
+      end
+
+      context 'default behaviour' do
+        it 'calls the default attribute' do
+          expect(subject).to receive(:insecure_url_thumb)
+          subject.url_thumb
+        end
+      end
+    end
+
     describe '#animal' do
       it { expect(subject).to respond_to(:animal) }
       it { expect(subject).to respond_to(:animal=) }

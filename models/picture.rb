@@ -14,7 +14,7 @@ module RescueGroups
       fileNameFullsize:     :file_name_full_size,
       fileNameThumbnail:    :file_name_thumbnail,
       urlSecureFullsize:    :url_full,
-      urlSecureThumbnail:   :url_thumnail,
+      urlSecureThumbnail:   :url_thumbnail,
       urlInsecureFullsize:  :insecure_url_full,
       urlInsecureThumbnail: :insecure_url_thumb,
       original:             :original,
@@ -31,12 +31,12 @@ module RescueGroups
       end
     end
 
-    def thumb
-      insecure_url_thumb
+    def url(secure: false)
+      secure ? url_full : insecure_url_full
     end
 
-    def full
-      insecure_url_full
+    def url_thumb(secure: false)
+      secure ? url_thumbnail : insecure_url_thumb
     end
   end
 end
