@@ -17,10 +17,17 @@ module RescueGroups
     # return: nil
     def initialize(attribute_hash = {})
       (attribute_hash || {}).each do |key, value|
-        mapped_method = "#{ self.class.object_fields::FIELDS.key(key.to_sym) }="
+        mapped_key = self.class.object_fields::FIELDS.key(key.to_sym)
+        mapped_method = "#{ mapped_key }="
         next unless self.respond_to?(mapped_method)
-        self.send(mapped_method, value)
+        self.send(mapped_method, cast_attribute_to_type(mapped_key, value))
       end
+    end
+
+    def cast_attribute_to_type(name, value)
+      return value.to_i if name.to_s == 'id' || name =~ /_id/
+
+      value
     end
 
     # method: attributes
