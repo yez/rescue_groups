@@ -35,13 +35,13 @@ module RescueGroups
 
       it 'has pictures with thumbnails' do
         subject.pictures.each do |picture|
-          expect(picture.thumb).to_not be_nil
+          expect(picture.url_thumb).to_not be_nil
         end
       end
 
       it 'has pictures will full size images' do
         subject.pictures.each do |picture|
-          expect(picture.full).to_not be_nil
+          expect(picture.url).to_not be_nil
         end
       end
 
