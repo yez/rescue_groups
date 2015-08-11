@@ -39,8 +39,8 @@ module RescueGroups
           end
         end
 
-        attr_writer relationship, :"#{ relationship }_id"
-        attr_reader :"#{ relationship }_id"
+        attr_writer relationship
+        attr_accessor :"#{ relationship }_id"
       end
       # method: has_many
       # purpose: define methods that denote a relationship
