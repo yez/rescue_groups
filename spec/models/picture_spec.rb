@@ -7,7 +7,7 @@ module RescueGroups
       context 'given a list of rescue groups attributes' do
         let(:attributes) do
           {}.tap do |attrs|
-            described_class::FIELDS.keys.sample(5).each do |key|
+            PictureField::FIELDS.keys.sample(5).each do |key|
               attrs[key] = anything
             end
           end
@@ -17,7 +17,7 @@ module RescueGroups
           picture = described_class.new(attributes)
 
           attributes.keys.each do |attr_name|
-            mapped_key = described_class::FIELDS[attr_name]
+            mapped_key = PictureField::FIELDS[attr_name]
             expect(picture.send(mapped_key)).to_not be_nil
           end
         end
@@ -27,7 +27,7 @@ module RescueGroups
             picture = described_class.new(attributes.merge(foo: :bar))
 
             attributes.keys.each do |attr_name|
-              mapped_key = described_class::FIELDS[attr_name]
+              mapped_key = PictureField::FIELDS[attr_name]
               expect(picture.send(mapped_key)).to_not be_nil
             end
 

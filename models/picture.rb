@@ -1,32 +1,16 @@
+require_relative '../fields/picture_field'
+
 module RescueGroups
   class Picture
     include Relationable
 
     belongs_to :animal
 
-    FIELDS = {
-      mediaID:              :id,
-      mediaOrder:           :order,
-      lastUpdated:          :updated_at,
-      fileSize:             :file_size,
-      resolutionX:          :resolution_x,
-      resolutionY:          :resolution_y,
-      fileNameFullsize:     :file_name_full_size,
-      fileNameThumbnail:    :file_name_thumbnail,
-      urlSecureFullsize:    :url_full,
-      urlSecureThumbnail:   :url_thumbnail,
-      urlInsecureFullsize:  :insecure_url_full,
-      urlInsecureThumbnail: :insecure_url_thumb,
-      original:             :original,
-      large:                :large,
-      small:                :small
-    }
-
-    attr_accessor *FIELDS.values
+    attr_accessor *PictureField::FIELDS.values
 
     def initialize(attribute_hash = {})
       attribute_hash.each do |key, value|
-        mapped_key = FIELDS[key.to_sym]
+        mapped_key = PictureField::FIELDS[key.to_sym]
         self.send(:"#{ mapped_key }=", value) unless mapped_key.nil?
       end
     end

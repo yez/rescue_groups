@@ -1,5 +1,5 @@
 require_relative './base_search'
-require_relative './organization_field'
+require_relative '../fields/organization_field'
 
 module RescueGroups
   class OrganizationSearch < BaseSearch

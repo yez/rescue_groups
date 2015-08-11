@@ -1,5 +1,5 @@
 require_relative './base_search'
-require_relative './animal_field'
+require_relative '../fields/animal_field'
 
 module RescueGroups
   class AnimalSearch < BaseSearch

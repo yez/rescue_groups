@@ -1,5 +1,5 @@
 require_relative './base_search'
-require_relative './event_field'
+require_relative '../fields/event_field'
 
 module RescueGroups
   class EventSearch < BaseSearch
