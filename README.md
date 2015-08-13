@@ -32,7 +32,7 @@ end
 
 # Searching
 
-Two methods, `find` and `where`, are used to search three resources: `Animal`, `Organization`, and `Event`.
+Two methods, `find` and `where`, are used to request three resources: `Animal`, `Organization`, and `Event`.
 
 ### `find`
 
@@ -191,4 +191,28 @@ The `where_not_found` method emulates a `where` method that returns no results, 
 ```ruby
 RescueGroups::Animal.where_not_found
 #=> []
+```
+
+## Pictures
+
+`Animals` have many `Pictures`
+
+A Picture exposes two methods: `url` and `url_thumb`
+
+Each of these methods accepts an option keyword parameter `secure:`. This param returns a secure url (https) if passed. It it is ommitted, a default http url is returned.
+
+### Default
+
+```ruby
+animal = Animal.find(1)
+animal.pictures.first.url
+#=> "http://image.to.my.animal/1234"
+```
+
+### Secure
+
+```ruby
+animal = Animal.find(1)
+animal.pictures.first.url(secure: true)
+#=> "https://secure.image.to.my.animal/1234"
 ```
