@@ -58,7 +58,15 @@ If the object(s) is not found, an exception is raised `"Unable to find Animal wi
 
 ### `where`
 
-The where method accepts a hash of attributes and finds animals that match all the criteria. If the returned list of objects is less than the count found by the server, additional requests are automatically made with the same search criteria until all results returned.
+The where method accepts a hash of attributes and finds animals that match all the criteria. If the returned list of objects is less than the count found by the server, a configuration variable can be added to make additional requests are automatically made with the same search criteria until all results returned.
+
+To enable this feature, set the config in an initializer like:
+
+```ruby
+RescueGroups.configuration do |config|
+  config.load_all_results = true
+end
+```
 
 A full set of fields are defined for [`Animals`](docs/animal_field.md), [`Organizations`](docs/organization_field.md), and [`Events`](docs/event_field.md)
 

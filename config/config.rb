@@ -1,6 +1,6 @@
 module RescueGroups
   class Config
-    attr_accessor :apikey
+    attr_accessor :apikey, :load_all_results
   end
 
   # method: config

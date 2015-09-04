@@ -114,10 +114,21 @@ module RescueGroups
             allow(response).to receive(:success?) { true }
           end
 
-          it 'makes additonal requests with an offset until the row count is met' do
-            expect(TestClass.api_client).to receive(:post_and_respond)
-                                        .exactly(31).times
+          it 'only calls the api once' do
+            expect(TestClass.api_client).to receive(:post_and_respond).once
             TestClass.where(anything: anything)
+          end
+
+          context 'the load all results param is enabled' do
+            before do
+              allow(RescueGroups.config).to receive(:load_all_results) { true }
+            end
+
+            it 'makes additonal requests with an offset until the row count is met' do
+              expect(TestClass.api_client).to receive(:post_and_respond)
+                                          .exactly(31).times
+              TestClass.where(anything: anything)
+            end
           end
         end
       end

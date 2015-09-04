@@ -59,7 +59,9 @@ module RescueGroups
       private
 
       def additional_request_data(request)
-        return request.results unless request.can_request_more?
+        unless RescueGroups.config.load_all_results && request.can_request_more?
+          return request.results
+        end
 
         (request.results['found_rows'] / request.search_engine.limit).times.each do |i|
           request.update_conditions!(limit: request.search_engine.limit * (i + 1))
