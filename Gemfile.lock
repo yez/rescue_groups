@@ -85,5 +85,6 @@ DEPENDENCIES
   guard-rspec
   pry
   rake
+  rescue_groups!
   rspec
   webmock
