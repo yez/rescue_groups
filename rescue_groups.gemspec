@@ -1,6 +1,5 @@
 $LOAD_PATH << File.dirname(__FILE__)
-require 'rescue_groups'
-require_relative './version'
+require 'version'
 
 Gem::Specification.new do |s|
   s.name          = 'rescue_groups'
