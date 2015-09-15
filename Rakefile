@@ -1,5 +1,5 @@
-require './config/initializer'
-require './spec/fixtures/test_constants'
+require_relative './config/initializer'
+require_relative './spec/fixtures/test_constants'
 
 namespace :fixtures do
   desc 'reload fixtures from remote API'
