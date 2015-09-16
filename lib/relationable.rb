@@ -30,12 +30,10 @@ module RescueGroups
           model = instance_variable_get(:"@#{ relationship }")
           return model unless model.nil?
 
-          relationship_id = self.send(:"#{ relationship }_id")
-
-          unless relationship_id.nil?
+          if id_to_fetch = self.send(:"#{ relationship }_id")
             klass = RescueGroups.constantize(relationship)
 
-            self.send(:"#{ relationship }=", klass.find(relationship_id))
+            self.send(:"#{ relationship }=", klass.find(id_to_fetch))
           end
         end
 
