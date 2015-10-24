@@ -2,3 +2,4 @@
 Guardfile
 scripts/*
 .ENV
+*.gem
