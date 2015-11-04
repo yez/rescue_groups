@@ -13,14 +13,14 @@ module RescueGroups
     belongs_to :other_class
     has_many :yet_another_classes
 
-    def initialize(other_class:, yet_another_classes:)
+    def initialize(other_class, yet_another_classes)
       self.other_class         = other_class
       self.yet_another_classes = yet_another_classes
     end
   end
 
   describe 'Relationable' do
-    subject { IncludedClass.new(other_class: other_class, yet_another_classes: yet_another_classes) }
+    subject { IncludedClass.new(other_class, yet_another_classes) }
     let(:other_class)         { nil }
     let(:yet_another_classes) { nil }
 
