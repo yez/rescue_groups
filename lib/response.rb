@@ -5,12 +5,12 @@ module RescueGroups
     # method: initialize
     # purpose: When a Response is created, this method
     #            extracts the code and parsed_response from
-    #            the raw HTTParty response
-    # param: raw_response - <HTTParty Response> - raw HTTParty response
+    #            the raw Faraday response
+    # param: raw_response - <Faraday Response> - raw Faraday response
     # return: nil
     def initialize(raw_response)
-      @http_status_code = raw_response.code
-      @parsed_body      = raw_response.parsed_response
+      @http_status_code = raw_response.status
+      @parsed_body      = JSON.parse(raw_response.body)
     end
 
     # method: []

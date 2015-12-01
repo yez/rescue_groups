@@ -1,14 +1,14 @@
-require 'httparty'
+require 'faraday'
 require_relative './response'
 
 module RescueGroups
-  # HTTParty wrapper with defaulted values
-  #  for Content-Type, URL and apikey authentication
   class RemoteClient
-    include HTTParty
 
-    base_uri 'https://api.rescuegroups.org/http/json'
-    headers 'Content-Type' => 'application/json'
+    BASE_URL = 'https://api.rescuegroups.org/http/json'.freeze
+
+    def headers
+      { 'Content-Type' => 'application/json' }.merge(connection.headers)
+    end
 
     # method: post_and_respond
     # purpose: make a POST request to the RescueGroups API and respond
@@ -19,11 +19,16 @@ module RescueGroups
         raise 'No RescueGroups API Key set'
       end
 
-      response = self.class.post(
-        self.class.base_uri,
-        { body: JSON(post_body.merge(apikey: RescueGroups.config.apikey)) })
+      response = connection.post(BASE_URL) do |request|
+        request.headers = headers
+        request.body = JSON(post_body.merge(apikey: RescueGroups.config.apikey))
+      end
 
       Response.new(response)
+    end
+
+    def connection
+      @connection ||= Faraday.new
     end
   end
 end

@@ -1,5 +1,5 @@
 require 'json'
-require 'httparty'
+require 'faraday'
 # This must be required before configuration can happen
 require_relative '../rescue_groups'
 require_relative './config'

@@ -4,12 +4,15 @@ require_relative '../../lib/remote_client'
 module RescueGroups
   describe RemoteClient do
     describe '#post_and_respond' do
+      let(:connection) { instance_double(Faraday::Connection) }
+
       before do
         allow(Response).to receive(:new)
+        allow(subject).to receive(:connection) { connection }
       end
 
-      it 'calls the class post method' do
-        expect(described_class).to receive(:post)
+      it 'calls the class post on the connection' do
+        expect(connection).to receive(:post)
         subject.post_and_respond({})
       end
 
