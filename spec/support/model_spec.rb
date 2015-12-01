@@ -1,5 +1,3 @@
-require_relative '../spec_helper'
-
 shared_examples 'a model' do |known_attributes|
   describe '#initialize' do
     subject { described_class.new(attributes) }

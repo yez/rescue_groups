@@ -1,6 +1,5 @@
 require_relative '../spec_helper'
 require_relative '../../models/animal'
-require_relative '../support/model_spec'
 
 module RescueGroups
   describe Animal do

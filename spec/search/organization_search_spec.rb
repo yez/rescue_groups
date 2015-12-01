@@ -1,4 +1,3 @@
-require_relative '../support/searchable_spec'
 require_relative '../../search/organization_search'
 
 module RescueGroups

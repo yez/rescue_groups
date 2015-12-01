@@ -1,4 +1,6 @@
 require_relative '../rescue_groups'
+require_relative 'support/model_spec'
+require_relative 'support/searchable_spec'
 
 RescueGroups.configuration do |config|
   config.apikey = 'test_api_key'

@@ -1,5 +1,4 @@
 require_relative '../spec_helper'
-require_relative '../support/model_spec'
 require_relative '../../models/event'
 
 module RescueGroups
