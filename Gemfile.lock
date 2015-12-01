@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     rescue_groups (0.0.1)
-      faraday
+      faraday (~> 0.9)
 
 GEM
   remote: https://rubygems.org/
