@@ -6,7 +6,6 @@ RescueGroups.configuration do |config|
   config.apikey = 'test_api_key'
 end
 
-require 'pry'
 require 'webmock/rspec'
 require_relative './fixtures/test_constants'
 
