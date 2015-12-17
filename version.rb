@@ -1,3 +1,7 @@
 module RescueGroups
-  VERSION = '0.0.1'.freeze
+  MAJOR = 1
+  MINOR = 0
+  TINY = 0
+
+  VERSION = [MAJOR, MINOR, TINY].join('.').freeze
 end

@@ -15,14 +15,12 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split("\n")
   s.test_files    = s.files.grep(/^spec\//)
 
-  s.required_ruby_version = '>= 2.0.0'
+  s.required_ruby_version = '~> 2.0'
 
   s.add_dependency 'faraday', '~> 0.9'
 
   s.add_development_dependency 'bundler', '~> 1.3'
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'pry'
-  s.add_development_dependency 'webmock'
-  s.add_development_dependency 'guard-rspec'
+  s.add_development_dependency 'rake', '~> 10.4'
+  s.add_development_dependency 'rspec', '~> 3.2'
+  s.add_development_dependency 'webmock', '~> 1.0'
 end
