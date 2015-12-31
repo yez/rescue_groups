@@ -224,3 +224,7 @@ animal = Animal.find(1)
 animal.pictures.first.url(secure: true)
 #=> "https://secure.image.to.my.animal/1234"
 ```
+
+#### Contributing
+
+Please feel free to submit pull requests to address issues that you may find with this software. One commit per pull request is preferred please and thank you.
