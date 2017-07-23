@@ -24,4 +24,4 @@ module RescueGroups
   end
 end
 
-require_relative './config/initializer'
+require_relative '../config/initializer'

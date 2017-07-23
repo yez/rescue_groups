@@ -109,7 +109,7 @@ For more sophisticated searches, the following attributes are provided:
 These attributes may be used in addition to others in a single `where` call or alone
 
 ```ruby
-Animal.where(general_age: { less_than: 5})
+Animal.where(general_age: { less_than: 5 })
 # => [<Animal id: 1, age: 2 ..>, <Animal id: 3, age: 1 ..>]
 
 Organization.where(name: { contains: 'shelter'}, location: 90210)

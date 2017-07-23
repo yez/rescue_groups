@@ -1,7 +1,7 @@
 require 'json'
 require 'faraday'
 # This must be required before configuration can happen
-require_relative '../rescue_groups'
+require_relative '../lib/rescue_groups'
 require_relative './config'
 
 RescueGroups.configuration do |config|
