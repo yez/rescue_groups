@@ -1,4 +1,4 @@
-require_relative '../rescue_groups'
+require_relative '../lib/rescue_groups'
 require_relative 'support/model_spec'
 require_relative 'support/searchable_spec'
 
