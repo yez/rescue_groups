@@ -14,7 +14,7 @@ module RescueGroups
       location_address:          :orgAddress,
       location_city:             :orgCity,
       location_country:          :orgCountry,
-      # location_distance:         :orgLocationDistance, # Seems to have been removed
+      location_distance:         :orgLocationDistance,
       location_postal:           :orgPostalcode,
       location_state:            :orgState,
       location_zip_plus_4:       :orgPlus4,

@@ -127,7 +127,7 @@ module RescueGroups
       foster_phone_cell:         :fosterPhoneCell,
       foster_phone_home:         :fosterPhoneHome,
       foster_salutation:         :fosterSalutation,
-      location_addresss:         :locationAddress,
+      location_address:          :locationAddress,
       location_city:             :locationCity,
       location_country:          :locationCountry,
       location_url:              :locationUrl,

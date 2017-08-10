@@ -54,7 +54,7 @@ module RescueGroups
         resultStart:   @start,
         resultLimit:   @limit,
         resultSort:    @sort,
-        resultOrder:   @order,
+        resultOrder:   @order.to_s,
         calcFoundRows: @calc_found_rows,
         filters:       @filters.map(&:as_json),
         fields:        @fields,

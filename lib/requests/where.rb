@@ -57,6 +57,7 @@ module RescueGroups
           limit: @limit,
           start: @start,
           sort: @sort,
+          order: @order
         }.reject { |_, v| v.nil? }
 
         search = search_engine_class.new(**args)
